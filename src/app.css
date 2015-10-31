@@ -43,7 +43,7 @@ routine-snapshot {
   align-items: center;
 }
 
-button {
+a {
   background-color: inherit;
   border: none;
   color: #42A5F5;
