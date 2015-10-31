@@ -1,10 +1,8 @@
 <div class="card">
 	<span class="name">{{routine.name}}</span>
-  <div *ng-for="#lift of routine.lifts" class="lift">
-    {{lift}}
-  </div>
+  <div *ng-for="#lift of routine.lifts" class="lift">{{lift}}</div>
   <div class="flex horizontal center justified">
     <span class="last-update">{{routine.lastCompletedTime}}</span>
-    <button (click)="startRoutine(routine)">Start</button>
+    <a [router-link]="[ '/WorkoutRoutine', {id: 1}]">Start</a>
   </div>
 </div>

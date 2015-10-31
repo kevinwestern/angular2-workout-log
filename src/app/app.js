@@ -10,35 +10,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var routines_1 = require('./mocks/routines');
-var workout_routine_1 = require('./components/workout-routine/workout-routine');
-var RoutineService = (function () {
-    function RoutineService() {
-        this.routines = routines_1.ROUTINES;
-    }
-    RoutineService.prototype.getRoutines = function () {
-        return this.routines;
-    };
-    RoutineService = __decorate([
-        angular2_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], RoutineService);
-    return RoutineService;
-})();
-var AppComponent = (function () {
-    function AppComponent(routineService) {
+var routine_service_1 = require('./services/routine-service');
+var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
+var router_1 = require('angular2/router');
+var RoutineList = (function () {
+    function RoutineList(routineService) {
         this.routineService = routineService;
         this.routines = this.routineService.getRoutines();
+    }
+    RoutineList = __decorate([
+        angular2_1.Component({
+            selector: 'routine-list',
+            template: "\n      <div class=\"app-content\">\n          <routine-snapshot *ng-for=\"#routine of routines\" [routine]=\"routine\"></routine-snapshot>\n      </div>\n  ",
+            directives: [routine_snapshot_1.RoutineSnapshot, angular2_1.NgFor, router_1.ROUTER_DIRECTIVES],
+        }), 
+        __metadata('design:paramtypes', [routine_service_1.RoutineService])
+    ], RoutineList);
+    return RoutineList;
+})();
+var AppComponent = (function () {
+    function AppComponent() {
     }
     AppComponent = __decorate([
         angular2_1.Component({
             selector: 'my-app',
-            template: "\n      <div class=\"app-content\">\n          <workout-routine *ng-for=\"#routine of routines\" [routine]=\"routine\"></workout-routine>\n      </div>\n  ",
-            directives: [workout_routine_1.WorkoutRoutine, angular2_1.NgFor, angular2_1.FORM_DIRECTIVES],
-        }), 
-        __metadata('design:paramtypes', [RoutineService])
+            template: "<router-outlet></router-outlet>",
+            directives: [router_1.ROUTER_DIRECTIVES],
+        }),
+        router_1.RouteConfig([
+            { path: '/', component: RoutineList },
+            { path: '/routines', component: RoutineList },
+            { path: '/routine/:id', component: routine_snapshot_1.RoutineSnapshot, as: 'WorkoutRoutine' }
+        ]), 
+        __metadata('design:paramtypes', [])
     ], AppComponent);
     return AppComponent;
 })();
-angular2_1.bootstrap(AppComponent, [RoutineService]);
+angular2_1.bootstrap(AppComponent, [
+    routine_service_1.RoutineService,
+    router_1.ROUTER_BINDINGS,
+    angular2_1.bind(router_1.APP_BASE_HREF).toValue(location.pathname)
+]);
 //# sourceMappingURL=app.js.map

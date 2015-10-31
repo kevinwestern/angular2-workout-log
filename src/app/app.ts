@@ -1,31 +1,21 @@
-import {Component, bootstrap, Injectable, Inject, NgFor, FORM_DIRECTIVES, Input} from 'angular2/angular2';
+import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular2/angular2';
 import {ROUTINES} from './mocks/routines';
 import {Routine} from './models/routine';
-import {WorkoutRoutine} from './components/workout-routine/workout-routine';
+import {RoutineService} from './services/routine-service';
+import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
+import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDINGS} from 'angular2/router'
 
-@Injectable()
-class RoutineService {
-  private routines: Routine[];
-  
-  constructor() {
-      this.routines = ROUTINES;
-  }
-  
-  getRoutines() {
-      return this.routines;
-  }
-}
 
 @Component({
-  selector: 'my-app',
+  selector: 'routine-list',
   template: `
       <div class="app-content">
-          <workout-routine *ng-for="#routine of routines" [routine]="routine"></workout-routine>
+          <routine-snapshot *ng-for="#routine of routines" [routine]="routine"></routine-snapshot>
       </div>
   `,
-  directives: [WorkoutRoutine, NgFor, FORM_DIRECTIVES],
+  directives: [RoutineSnapshot, NgFor, ROUTER_DIRECTIVES],
 })
-class AppComponent {
+class RoutineList {
   private routineService: RoutineService;
   
   public routines: Routine[]
@@ -35,4 +25,23 @@ class AppComponent {
       this.routines = this.routineService.getRoutines();
   }
 }
-bootstrap(AppComponent, [RoutineService]);
+
+
+@Component({
+  selector: 'my-app',
+  template: `<router-outlet></router-outlet>`,
+  directives: [ROUTER_DIRECTIVES],
+})
+@RouteConfig([
+  { path: '/', component: RoutineList },
+  { path: '/routines', component: RoutineList },
+  { path: '/routine/:id', component: RoutineSnapshot, as: 'WorkoutRoutine' }
+])
+class AppComponent {
+  
+}
+bootstrap(AppComponent, [
+  RoutineService,
+  ROUTER_BINDINGS,
+  bind(APP_BASE_HREF).toValue(location.pathname)
+ ]);
