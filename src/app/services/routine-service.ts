@@ -15,6 +15,6 @@ export class RoutineService {
   }
   
   get (id: number): Routine {
-    return this.routines[id];
+    return this.routines[id - 1]; // IDs start a 1
   }
 }

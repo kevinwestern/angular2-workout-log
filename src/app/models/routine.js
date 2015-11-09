@@ -1,6 +1,7 @@
 var Routine = (function () {
-    function Routine(name, lifts, lastCompletedTime) {
+    function Routine(id, name, lifts, lastCompletedTime) {
         if (lastCompletedTime === void 0) { lastCompletedTime = 'No last recorded time.'; }
+        this.id = id;
         this.name = name;
         this.lifts = lifts;
         this.lastCompletedTime = lastCompletedTime;

@@ -31,7 +31,8 @@ var RoutineSnapshot = (function () {
             templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
             directives: [angular2_1.NgFor, router_1.ROUTER_DIRECTIVES],
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
-            styleUrls: ['app/components/routine-snapshot/routine-snapshot.css']
+            //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
+            styles: ["\n    :host {\n      display: block;\n    }\n    \n    .name {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    .lift {\n      line-height: 1.5em;\n    }\n    \n    .last-update {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    "]
         }), 
         __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService])
     ], RoutineSnapshot);

@@ -3,6 +3,7 @@ import {ROUTINES} from './mocks/routines';
 import {Routine} from './models/routine';
 import {RoutineService} from './services/routine-service';
 import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
+import {RoutineLogger} from './components/routine-logger/routine-logger';
 import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDINGS} from 'angular2/router'
 
 
@@ -26,7 +27,6 @@ class RoutineList {
   }
 }
 
-
 @Component({
   selector: 'my-app',
   template: `<router-outlet></router-outlet>`,
@@ -35,6 +35,7 @@ class RoutineList {
 @RouteConfig([
   { path: '/', component: RoutineList },
   { path: '/routines', component: RoutineList },
+  { path: '/routine/:id/start', component: RoutineLogger, as: 'RoutineLogger'},
   { path: '/routine/:id', component: RoutineSnapshot, as: 'WorkoutRoutine' }
 ])
 class AppComponent {
@@ -43,5 +44,5 @@ class AppComponent {
 bootstrap(AppComponent, [
   RoutineService,
   ROUTER_BINDINGS,
-  bind(APP_BASE_HREF).toValue(location.pathname)
+  bind(APP_BASE_HREF).toValue('/src')
  ]);

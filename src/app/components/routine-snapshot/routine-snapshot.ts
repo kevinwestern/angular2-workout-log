@@ -9,7 +9,26 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
   templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
   directives: [NgFor, ROUTER_DIRECTIVES],
   encapsulation: ViewEncapsulation.Emulated,
-  styleUrls: ['app/components/routine-snapshot/routine-snapshot.css']
+  //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
+  styles: [`
+    :host {
+      display: block;
+    }
+    
+    .name {
+      font-size: 24px;
+      font-weight: 500;
+    }
+    
+    .lift {
+      line-height: 1.5em;
+    }
+    
+    .last-update {
+      color: rgba(0, 0, 0, .54);
+      font-style: italic;
+    }
+    `]
 })
 export class RoutineSnapshot {
   @Input()

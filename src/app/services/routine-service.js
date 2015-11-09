@@ -19,7 +19,7 @@ var RoutineService = (function () {
         return this.routines;
     };
     RoutineService.prototype.get = function (id) {
-        return this.routines[id];
+        return this.routines[id - 1]; // IDs start a 1
     };
     RoutineService = __decorate([
         angular2_1.Injectable(), 

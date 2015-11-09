@@ -1,0 +1,13 @@
+<div class="card">
+  <div *ng-for="#lift of routine.lifts">
+    <div class="lift">
+      <h3>{{lift.name}}</h3>
+      <div class="sets">
+        <div *ng-for="#set of lift.sets | range" class="lift-set">
+          <span>Set {{set}}: <input type="number" class="short-input" [attr.placeholder]="getMaxRepsForSet(lift, set)"></span>
+          <span>&nbsp; x <input type="number" class="short-input" [attr.placeholder]="getWeightForSet(lift, set)">lbs.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

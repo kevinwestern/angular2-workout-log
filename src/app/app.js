@@ -12,6 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var angular2_1 = require('angular2/angular2');
 var routine_service_1 = require('./services/routine-service');
 var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
+var routine_logger_1 = require('./components/routine-logger/routine-logger');
 var router_1 = require('angular2/router');
 var RoutineList = (function () {
     function RoutineList(routineService) {
@@ -40,6 +41,7 @@ var AppComponent = (function () {
         router_1.RouteConfig([
             { path: '/', component: RoutineList },
             { path: '/routines', component: RoutineList },
+            { path: '/routine/:id/start', component: routine_logger_1.RoutineLogger, as: 'RoutineLogger' },
             { path: '/routine/:id', component: routine_snapshot_1.RoutineSnapshot, as: 'WorkoutRoutine' }
         ]), 
         __metadata('design:paramtypes', [])
@@ -49,6 +51,6 @@ var AppComponent = (function () {
 angular2_1.bootstrap(AppComponent, [
     routine_service_1.RoutineService,
     router_1.ROUTER_BINDINGS,
-    angular2_1.bind(router_1.APP_BASE_HREF).toValue(location.pathname)
+    angular2_1.bind(router_1.APP_BASE_HREF).toValue('/src')
 ]);
 //# sourceMappingURL=app.js.map
