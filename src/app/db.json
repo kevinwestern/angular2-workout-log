@@ -1,0 +1,10 @@
+{
+  "routines": [{
+    "name": "Chest and Cavles",
+    "lifts": [{
+      "name": "Incline Barbell Press",
+      "sets": 3,
+      "suggestedReps": 6
+    }]
+  }]
+}

@@ -1,55 +1,17 @@
-import {Component, NgFor, Input, Output, Pipe, Directive, ElementRef} from 'angular2/angular2';
+import {Component, NgFor, Input, Output, Directive, FORM_DIRECTIVES} from 'angular2/angular2';
 import {Lift} from '../../models/lift';
 import {Routine} from '../../models/routine';
+import {RoutineEntry} from '../../models/routine-entry';
+import {FirebaseService} from '../../services/firebase-service';
 import {RoutineService} from '../../services/routine-service';
 import {ViewEncapsulation} from 'angular2/angular2';
 import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
 
 
-/**
- * Creates a numeric array of a given length with default values
- * of index+1.
- */
-@Pipe({
-  name: 'range'
-})
-class RangePipe {
-  transform(value: number): number[] {
-    let arr:number[] = [];
-    for (let i:number = 0; i < value; i++) {
-      arr.push(i + 1);
-    }
-    return arr;
-  }
-}
-
-
-@Directive({
-  selector: '[collapsable-item]',
-  host: {
-    '(click)': 'toggleCollapse()'
-  }
-})
-class CollapsableItem {
-  isCollapsed: boolean;
-  element: ElementRef;
-  
-  constructor(element: ElementRef) {
-    this.element = element;
-    this.isCollapsed = element.nativeElement.classList.contains('collapsed');
-  }
- 
-  toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
-    this.element.nativeElement.classList.toggle('collapsed');
-  }
-}
-
 @Component({
   selector: 'routine-logger',
   templateUrl: '/src/app/components/routine-logger/routine-logger.html',
-  directives: [NgFor, ROUTER_DIRECTIVES, CollapsableItem],
-  pipes: [RangePipe],
+  directives: [NgFor, ROUTER_DIRECTIVES, FORM_DIRECTIVES],
   encapsulation: ViewEncapsulation.Emulated,
   styles: [`
     :host {
@@ -82,18 +44,17 @@ class CollapsableItem {
     `]
 })
 export class RoutineLogger {
-  routine: Routine;
+  private firebase: FirebaseService;
+  public routineEntry: RoutineEntry;
   
-  constructor(params: RouteParams, routineService: RoutineService) {
+  constructor(params: RouteParams, routineService: RoutineService, firebase: FirebaseService) {
     let id = parseInt(params.get('id'), 10);
-    this.routine = routineService.get(id);    
+    this.firebase = firebase;
+    this.routineEntry = new RoutineEntry(routineService.get(id));
   }
   
-  getMaxRepsForSet(lift: Lift, set: number): number {
-    return 6;
-  }
-  
-  getWeightForSet(lift: Lift, set:number): number {
-    return 300;
+  handleChange(e) {
+    console.log(this.firebase)
+    this.firebase.set(this.routineEntry)
   }
 }

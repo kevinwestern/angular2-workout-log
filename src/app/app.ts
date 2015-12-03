@@ -1,6 +1,7 @@
 import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular2/angular2';
 import {ROUTINES} from './mocks/routines';
 import {Routine} from './models/routine';
+import {FirebaseService} from './services/firebase-service';
 import {RoutineService} from './services/routine-service';
 import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
 import {RoutineLogger} from './components/routine-logger/routine-logger';
@@ -42,6 +43,7 @@ class AppComponent {
   
 }
 bootstrap(AppComponent, [
+  FirebaseService,
   RoutineService,
   ROUTER_BINDINGS,
   bind(APP_BASE_HREF).toValue('/src')

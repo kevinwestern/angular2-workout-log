@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
+var firebase_service_1 = require('./services/firebase-service');
 var routine_service_1 = require('./services/routine-service');
 var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
 var routine_logger_1 = require('./components/routine-logger/routine-logger');
@@ -49,6 +50,7 @@ var AppComponent = (function () {
     return AppComponent;
 })();
 angular2_1.bootstrap(AppComponent, [
+    firebase_service_1.FirebaseService,
     routine_service_1.RoutineService,
     router_1.ROUTER_BINDINGS,
     angular2_1.bind(router_1.APP_BASE_HREF).toValue('/src')
