@@ -54,7 +54,7 @@ export class RoutineLogger {
   }
   
   handleChange(e) {
-    console.log(this.firebase)
-    this.firebase.set(this.routineEntry)
+    console.log(this.routineEntry)
+    this.firebase.saveRoutineEntry(this.routineEntry)
   }
 }

@@ -19,6 +19,18 @@ var FirebaseService = (function () {
     FirebaseService.prototype.set = function (data) {
         this.firebase.set(data);
     };
+    FirebaseService.prototype.saveRoutineEntry = function (entry) {
+        var routinePath = 'lifts/' + entry.routine.name;
+        var routineUpdate = {};
+        routineUpdate[routinePath] = entry.routine;
+        entry.routine.lastCompletedTime = Firebase.ServerValue.TIMESTAMP;
+        this.firebase.update(routineUpdate);
+        var entriesRef = this.firebase.child('entries');
+        var entriesUpdate = {};
+        entriesUpdate[entry.routine.name] = entry.liftEntries;
+        var key = entriesRef.push(entriesUpdate).key();
+        console.log(key);
+    };
     FirebaseService = __decorate([
         angular2_1.Injectable(), 
         __metadata('design:paramtypes', [])

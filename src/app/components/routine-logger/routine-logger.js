@@ -22,8 +22,8 @@ var RoutineLogger = (function () {
         this.routineEntry = new routine_entry_1.RoutineEntry(routineService.get(id));
     }
     RoutineLogger.prototype.handleChange = function (e) {
-        console.log(this.firebase);
-        this.firebase.set(this.routineEntry);
+        console.log(this.routineEntry);
+        this.firebase.saveRoutineEntry(this.routineEntry);
     };
     RoutineLogger = __decorate([
         angular2_1.Component({

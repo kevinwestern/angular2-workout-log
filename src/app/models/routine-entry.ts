@@ -30,7 +30,7 @@ export class LiftEntry {
     this.suggestedWeight = suggestedWeight;
     this.sets = [];
     for (let i = 0; i < numberOfSets; i++) {
-      this.sets.push(new SetEntry(3, suggestedWeight += 5))
+      this.sets.push(new SetEntry(6, suggestedWeight += 5))
     }
   }
 }
@@ -43,8 +43,6 @@ export class SetEntry {
   
   constructor(suggestedReps: number, suggestedWeight: number) {
     this.suggestedReps = suggestedReps;
-    this.actualReps = suggestedReps;
     this.suggestedWeight = suggestedWeight;
-    this.actualWeight = suggestedWeight;
   }
 }

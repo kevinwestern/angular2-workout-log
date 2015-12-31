@@ -19,7 +19,7 @@ var LiftEntry = (function () {
         this.suggestedWeight = suggestedWeight;
         this.sets = [];
         for (var i = 0; i < numberOfSets; i++) {
-            this.sets.push(new SetEntry(3, suggestedWeight += 5));
+            this.sets.push(new SetEntry(6, suggestedWeight += 5));
         }
     }
     return LiftEntry;
@@ -28,9 +28,7 @@ exports.LiftEntry = LiftEntry;
 var SetEntry = (function () {
     function SetEntry(suggestedReps, suggestedWeight) {
         this.suggestedReps = suggestedReps;
-        this.actualReps = suggestedReps;
         this.suggestedWeight = suggestedWeight;
-        this.actualWeight = suggestedWeight;
     }
     return SetEntry;
 })();
