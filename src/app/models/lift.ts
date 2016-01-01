@@ -6,4 +6,8 @@ export class Lift {
     this.sets = sets;
     this.name = name;
   }
+  
+  static fromJson(json: JSON): Lift {
+    return new Lift(json.sets, json.name);
+  }
 }

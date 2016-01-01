@@ -1,11 +1,14 @@
+var lift_1 = require('./lift');
 var Routine = (function () {
-    function Routine(id, name, lifts, lastCompletedTime) {
+    function Routine(name, lifts, lastCompletedTime) {
         if (lastCompletedTime === void 0) { lastCompletedTime = 'No last recorded time.'; }
-        this.id = id;
         this.name = name;
         this.lifts = lifts;
         this.lastCompletedTime = lastCompletedTime;
     }
+    Routine.fromJson = function (json) {
+        return new Routine(json.name, json.lifts.map(lift_1.Lift.fromJson), json.lastCompletedTime);
+    };
     return Routine;
 })();
 exports.Routine = Routine;

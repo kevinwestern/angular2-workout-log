@@ -6,11 +6,14 @@ export class Routine {
     public lifts: Lift[];
     public lastCompletedTime: string;
     
-    constructor(id: number, name: string, lifts: Lift[],
+    constructor(name: string, lifts: Lift[],
       lastCompletedTime: string = 'No last recorded time.') {
-        this.id = id;
         this.name = name;
         this.lifts = lifts;
         this.lastCompletedTime = lastCompletedTime;
+    }
+    
+    static fromJson(json: JSON): Routine {
+      return new Routine(json.name, json.lifts.map(Lift.fromJson), json.lastCompletedTime);
     }
 }

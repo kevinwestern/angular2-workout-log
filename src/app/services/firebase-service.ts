@@ -18,6 +18,15 @@ export class FirebaseService {
   }
   
   saveRoutineEntry(entry: RoutineEntry) {
+    const entriesRef = this.firebase.child('entries');
+    const update = {};
+    update[entry.id] = {
+      enties: entry.liftEntries
+    };
+    entriesRef.update(update);
+  }
+  
+  createRoutineEntry(entry: RoutineEntry): string {
     const routinePath = 'lifts/' + entry.routine.name;
     const routineUpdate = {};
     routineUpdate[routinePath] = entry.routine;
@@ -26,8 +35,21 @@ export class FirebaseService {
         
     const entriesRef = this.firebase.child('entries');
     const entriesUpdate = {};
-    entriesUpdate[entry.routine.name] = entry.liftEntries;
+    entriesUpdate.name = entry.routine.name;
+    entriesUpdate.entries = entry.liftEntries;
     const key = entriesRef.push(entriesUpdate).key();
-    console.log(key);
+    return key;
+  }
+  
+  getRoutineEntry(id: string): Promise<RoutineEntry> {
+    const entriesRef = this.firebase.child(`entries/${id}`);
+    return new Promise((resolve, reject) => {
+      entriesRef.once('value', (e) => {
+        const entry = e.val();
+        this.firebase.child(`lifts/${entry.name}`).once('value', (l) => {
+          resolve(RoutineEntry.fromJson(e.key(), l.val(), entry));
+        }, reject)
+      }, reject);
+    });
   }
 }

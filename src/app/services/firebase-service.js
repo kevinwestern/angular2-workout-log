@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
+var routine_entry_1 = require('../models/routine-entry');
 var FIREBASE_APP_ID = 'torrid-fire-5346';
 var FirebaseService = (function () {
     function FirebaseService() {
@@ -20,6 +21,14 @@ var FirebaseService = (function () {
         this.firebase.set(data);
     };
     FirebaseService.prototype.saveRoutineEntry = function (entry) {
+        var entriesRef = this.firebase.child('entries');
+        var update = {};
+        update[entry.id] = {
+            enties: entry.liftEntries
+        };
+        entriesRef.update(update);
+    };
+    FirebaseService.prototype.createRoutineEntry = function (entry) {
         var routinePath = 'lifts/' + entry.routine.name;
         var routineUpdate = {};
         routineUpdate[routinePath] = entry.routine;
@@ -27,9 +36,22 @@ var FirebaseService = (function () {
         this.firebase.update(routineUpdate);
         var entriesRef = this.firebase.child('entries');
         var entriesUpdate = {};
-        entriesUpdate[entry.routine.name] = entry.liftEntries;
+        entriesUpdate.name = entry.routine.name;
+        entriesUpdate.entries = entry.liftEntries;
         var key = entriesRef.push(entriesUpdate).key();
-        console.log(key);
+        return key;
+    };
+    FirebaseService.prototype.getRoutineEntry = function (id) {
+        var _this = this;
+        var entriesRef = this.firebase.child("entries/" + id);
+        return new Promise(function (resolve, reject) {
+            entriesRef.once('value', function (e) {
+                var entry = e.val();
+                _this.firebase.child("lifts/" + entry.name).once('value', function (l) {
+                    resolve(routine_entry_1.RoutineEntry.fromJson(e.key(), l.val(), entry));
+                }, reject);
+            }, reject);
+        });
     };
     FirebaseService = __decorate([
         angular2_1.Injectable(), 

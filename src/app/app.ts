@@ -36,7 +36,7 @@ class RoutineList {
 @RouteConfig([
   { path: '/', component: RoutineList },
   { path: '/routines', component: RoutineList },
-  { path: '/routine/:id/start', component: RoutineLogger, as: 'RoutineLogger'},
+  { path: '/routine/:id/edit', component: RoutineLogger, as: 'RoutineLogger'},
   { path: '/routine/:id', component: RoutineSnapshot, as: 'WorkoutRoutine' }
 ])
 class AppComponent {

@@ -1,4 +1,4 @@
-import {Component, NgFor, Input, Output, Directive, FORM_DIRECTIVES} from 'angular2/angular2';
+import {Component, NgFor, NgIf, Input, Output, Directive, FORM_DIRECTIVES} from 'angular2/angular2';
 import {Lift} from '../../models/lift';
 import {Routine} from '../../models/routine';
 import {RoutineEntry} from '../../models/routine-entry';
@@ -11,7 +11,7 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
 @Component({
   selector: 'routine-logger',
   templateUrl: '/src/app/components/routine-logger/routine-logger.html',
-  directives: [NgFor, ROUTER_DIRECTIVES, FORM_DIRECTIVES],
+  directives: [NgFor, NgIf, ROUTER_DIRECTIVES, FORM_DIRECTIVES],
   encapsulation: ViewEncapsulation.Emulated,
   styles: [`
     :host {
@@ -48,13 +48,12 @@ export class RoutineLogger {
   public routineEntry: RoutineEntry;
   
   constructor(params: RouteParams, routineService: RoutineService, firebase: FirebaseService) {
-    let id = parseInt(params.get('id'), 10);
+    const id = params.get('id');
     this.firebase = firebase;
-    this.routineEntry = new RoutineEntry(routineService.get(id));
+    this.firebase.getRoutineEntry(id).then((re) => this.routineEntry = re)
   }
   
   handleChange(e) {
-    console.log(this.routineEntry)
     this.firebase.saveRoutineEntry(this.routineEntry)
   }
 }

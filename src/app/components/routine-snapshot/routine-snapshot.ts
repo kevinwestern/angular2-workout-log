@@ -1,8 +1,10 @@
 import {Component, NgFor, Input} from 'angular2/angular2';
 import {Routine} from '../../models/routine';
+import {RoutineEntry} from '../../models/routine-entry';
+import {FirebaseService} from '../../services/firebase-service';
 import {RoutineService} from '../../services/routine-service';
 import {ViewEncapsulation} from 'angular2/angular2';
-import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/router';
 
 @Component({
   selector: 'routine-snapshot',
@@ -34,10 +36,22 @@ export class RoutineSnapshot {
   @Input()
   routine: Routine;
   
-  constructor(params: RouteParams, routineService: RoutineService) {
+  constructor(
+    private params: RouteParams,
+    private routineService: RoutineService,
+    private firebase: FirebaseService,
+    private router: Router) {
     let id = params.get('id');
     if (id == null) {
       this.routine = routineService.get(parseInt(id, 10));
+    }
+    this.firebase = firebase;
+  }
+  
+  startWorkout() {
+    if (this.routine) {
+      const id = this.firebase.createRoutineEntry(new RoutineEntry(this.routine));
+      this.router.navigate(['/RoutineLogger', {id}])
     }
   }
 }

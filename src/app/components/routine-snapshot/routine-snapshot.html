@@ -3,6 +3,6 @@
   <div *ng-for="#lift of routine.lifts" class="lift">{{lift.name}}</div>
   <div class="flex horizontal center justified">
     <span class="last-update">{{routine.lastCompletedTime}}</span>
-    <a [router-link]="[ '/RoutineLogger', {id: routine.id}]">Start</a>
+    <button (click)="startWorkout()">Start</button>
   </div>
 </div>

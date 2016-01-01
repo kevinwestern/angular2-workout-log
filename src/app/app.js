@@ -42,7 +42,7 @@ var AppComponent = (function () {
         router_1.RouteConfig([
             { path: '/', component: RoutineList },
             { path: '/routines', component: RoutineList },
-            { path: '/routine/:id/start', component: routine_logger_1.RoutineLogger, as: 'RoutineLogger' },
+            { path: '/routine/:id/edit', component: routine_logger_1.RoutineLogger, as: 'RoutineLogger' },
             { path: '/routine/:id', component: routine_snapshot_1.RoutineSnapshot, as: 'WorkoutRoutine' }
         ]), 
         __metadata('design:paramtypes', [])
