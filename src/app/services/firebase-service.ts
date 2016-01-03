@@ -1,5 +1,7 @@
 import {Injectable} from 'angular2/angular2';
 import {RoutineEntry} from '../models/routine-entry';
+import {Routine} from '../models/routine';
+
 
 const FIREBASE_APP_ID = 'torrid-fire-5346';
 
@@ -21,22 +23,23 @@ export class FirebaseService {
     const entriesRef = this.firebase.child('entries');
     const update = {};
     update[entry.id] = {
-      enties: entry.liftEntries
+      entries: entry.liftEntries
     };
     entriesRef.update(update);
   }
   
   createRoutineEntry(entry: RoutineEntry): string {
-    const routinePath = 'lifts/' + entry.routine.name;
+    const routinePath = 'routines/' + entry.routine.name;
     const routineUpdate = {};
     routineUpdate[routinePath] = entry.routine;
     entry.routine.lastCompletedTime = Firebase.ServerValue.TIMESTAMP;
     this.firebase.update(routineUpdate);
         
     const entriesRef = this.firebase.child('entries');
-    const entriesUpdate = {};
-    entriesUpdate.name = entry.routine.name;
-    entriesUpdate.entries = entry.liftEntries;
+    const entriesUpdate = {
+      routine: entry.routine.name,
+      entries: entry.liftEntries
+    };
     const key = entriesRef.push(entriesUpdate).key();
     return key;
   }
@@ -46,10 +49,20 @@ export class FirebaseService {
     return new Promise((resolve, reject) => {
       entriesRef.once('value', (e) => {
         const entry = e.val();
-        this.firebase.child(`lifts/${entry.name}`).once('value', (l) => {
+        this.firebase.child(`routines/${entry.routine}`).once('value', (l) => {
           resolve(RoutineEntry.fromJson(e.key(), l.val(), entry));
         }, reject)
       }, reject);
+    });
+  }
+  
+  getRoutines(): Promise<Routine[]> {
+    const routinesRef = this.firebase.child('routines/');
+    return new Promise((resolve, reject) => {
+      routinesRef.orderByKey().once('value', (r) => {
+        const routines = r.val();
+        resolve(Object.keys(routines).map((k) => Routine.fromJson(routines[k])))
+      }, reject)
     });
   }
 }

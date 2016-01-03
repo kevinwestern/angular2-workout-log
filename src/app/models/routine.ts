@@ -1,13 +1,11 @@
 import {Lift} from './lift';
 
 export class Routine {
-    public id:number;
     public name: string;
     public lifts: Lift[];
-    public lastCompletedTime: string;
+    public lastCompletedTime: number;
     
-    constructor(name: string, lifts: Lift[],
-      lastCompletedTime: string = 'No last recorded time.') {
+    constructor(name: string, lifts: Lift[], lastCompletedTime?: number) {
         this.name = name;
         this.lifts = lifts;
         this.lastCompletedTime = lastCompletedTime;

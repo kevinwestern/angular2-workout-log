@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var angular2_1 = require('angular2/angular2');
 var routine_entry_1 = require('../models/routine-entry');
+var routine_1 = require('../models/routine');
 var FIREBASE_APP_ID = 'torrid-fire-5346';
 var FirebaseService = (function () {
     function FirebaseService() {
@@ -24,20 +25,21 @@ var FirebaseService = (function () {
         var entriesRef = this.firebase.child('entries');
         var update = {};
         update[entry.id] = {
-            enties: entry.liftEntries
+            entries: entry.liftEntries
         };
         entriesRef.update(update);
     };
     FirebaseService.prototype.createRoutineEntry = function (entry) {
-        var routinePath = 'lifts/' + entry.routine.name;
+        var routinePath = 'routines/' + entry.routine.name;
         var routineUpdate = {};
         routineUpdate[routinePath] = entry.routine;
         entry.routine.lastCompletedTime = Firebase.ServerValue.TIMESTAMP;
         this.firebase.update(routineUpdate);
         var entriesRef = this.firebase.child('entries');
-        var entriesUpdate = {};
-        entriesUpdate.name = entry.routine.name;
-        entriesUpdate.entries = entry.liftEntries;
+        var entriesUpdate = {
+            routine: entry.routine.name,
+            entries: entry.liftEntries
+        };
         var key = entriesRef.push(entriesUpdate).key();
         return key;
     };
@@ -47,9 +49,18 @@ var FirebaseService = (function () {
         return new Promise(function (resolve, reject) {
             entriesRef.once('value', function (e) {
                 var entry = e.val();
-                _this.firebase.child("lifts/" + entry.name).once('value', function (l) {
+                _this.firebase.child("routines/" + entry.routine).once('value', function (l) {
                     resolve(routine_entry_1.RoutineEntry.fromJson(e.key(), l.val(), entry));
                 }, reject);
+            }, reject);
+        });
+    };
+    FirebaseService.prototype.getRoutines = function () {
+        var routinesRef = this.firebase.child('routines/');
+        return new Promise(function (resolve, reject) {
+            routinesRef.orderByKey().once('value', function (r) {
+                var routines = r.val();
+                resolve(Object.keys(routines).map(function (k) { return routine_1.Routine.fromJson(routines[k]); }));
             }, reject);
         });
     };

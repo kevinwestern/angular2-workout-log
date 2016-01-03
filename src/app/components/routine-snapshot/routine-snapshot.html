@@ -2,7 +2,7 @@
 	<span class="name">{{routine.name}}</span>
   <div *ng-for="#lift of routine.lifts" class="lift">{{lift.name}}</div>
   <div class="flex horizontal center justified">
-    <span class="last-update">{{routine.lastCompletedTime}}</span>
+    <span class="last-update">{{routine.lastCompletedTime | messageOrDate:'No last recorded time':'fullDate'}}</span>
     <button (click)="startWorkout()">Start</button>
   </div>
 </div>

@@ -10,15 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
+var angular2_2 = require('angular2/angular2');
+var messageordate_1 = require('./pipes/messageordate');
 var firebase_service_1 = require('./services/firebase-service');
 var routine_service_1 = require('./services/routine-service');
 var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
 var routine_logger_1 = require('./components/routine-logger/routine-logger');
 var router_1 = require('angular2/router');
 var RoutineList = (function () {
-    function RoutineList(routineService) {
-        this.routineService = routineService;
-        this.routines = this.routineService.getRoutines();
+    function RoutineList(firebaseService) {
+        var _this = this;
+        firebaseService.getRoutines().then(function (routines) { return _this.routines = routines; });
     }
     RoutineList = __decorate([
         angular2_1.Component({
@@ -26,7 +28,7 @@ var RoutineList = (function () {
             template: "\n      <div class=\"app-content\">\n          <routine-snapshot *ng-for=\"#routine of routines\" [routine]=\"routine\"></routine-snapshot>\n      </div>\n  ",
             directives: [routine_snapshot_1.RoutineSnapshot, angular2_1.NgFor, router_1.ROUTER_DIRECTIVES],
         }), 
-        __metadata('design:paramtypes', [routine_service_1.RoutineService])
+        __metadata('design:paramtypes', [firebase_service_1.FirebaseService])
     ], RoutineList);
     return RoutineList;
 })();
@@ -50,7 +52,9 @@ var AppComponent = (function () {
     return AppComponent;
 })();
 angular2_1.bootstrap(AppComponent, [
+    angular2_2.DatePipe,
     firebase_service_1.FirebaseService,
+    messageordate_1.MessageOrDate,
     routine_service_1.RoutineService,
     router_1.ROUTER_BINDINGS,
     angular2_1.bind(router_1.APP_BASE_HREF).toValue('/src')

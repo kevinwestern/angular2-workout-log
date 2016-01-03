@@ -3,6 +3,7 @@ import {Routine} from '../../models/routine';
 import {RoutineEntry} from '../../models/routine-entry';
 import {FirebaseService} from '../../services/firebase-service';
 import {RoutineService} from '../../services/routine-service';
+import {MessageOrDate} from '../../pipes/messageordate';
 import {ViewEncapsulation} from 'angular2/angular2';
 import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/router';
 
@@ -11,6 +12,7 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/rout
   templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
   directives: [NgFor, ROUTER_DIRECTIVES],
   encapsulation: ViewEncapsulation.Emulated,
+  pipes: [MessageOrDate],
   //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
   styles: [`
     :host {
@@ -42,7 +44,7 @@ export class RoutineSnapshot {
     private firebase: FirebaseService,
     private router: Router) {
     let id = params.get('id');
-    if (id == null) {
+    if (id != null) {
       this.routine = routineService.get(parseInt(id, 10));
     }
     this.firebase = firebase;

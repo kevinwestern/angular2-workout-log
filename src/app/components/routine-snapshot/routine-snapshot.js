@@ -14,6 +14,7 @@ var routine_1 = require('../../models/routine');
 var routine_entry_1 = require('../../models/routine-entry');
 var firebase_service_1 = require('../../services/firebase-service');
 var routine_service_1 = require('../../services/routine-service');
+var messageordate_1 = require('../../pipes/messageordate');
 var angular2_2 = require('angular2/angular2');
 var router_1 = require('angular2/router');
 var RoutineSnapshot = (function () {
@@ -23,7 +24,7 @@ var RoutineSnapshot = (function () {
         this.firebase = firebase;
         this.router = router;
         var id = params.get('id');
-        if (id == null) {
+        if (id != null) {
             this.routine = routineService.get(parseInt(id, 10));
         }
         this.firebase = firebase;
@@ -44,6 +45,7 @@ var RoutineSnapshot = (function () {
             templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
             directives: [angular2_1.NgFor, router_1.ROUTER_DIRECTIVES],
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
+            pipes: [messageordate_1.MessageOrDate],
             //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
             styles: ["\n    :host {\n      display: block;\n    }\n    \n    .name {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    .lift {\n      line-height: 1.5em;\n    }\n    \n    .last-update {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    "]
         }), 
