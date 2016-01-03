@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var angular2_2 = require('angular2/angular2');
 var messageordate_1 = require('./pipes/messageordate');
 var firebase_service_1 = require('./services/firebase-service');
 var routine_service_1 = require('./services/routine-service');
@@ -52,7 +51,6 @@ var AppComponent = (function () {
     return AppComponent;
 })();
 angular2_1.bootstrap(AppComponent, [
-    angular2_2.DatePipe,
     firebase_service_1.FirebaseService,
     messageordate_1.MessageOrDate,
     routine_service_1.RoutineService,

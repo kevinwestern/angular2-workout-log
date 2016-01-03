@@ -1,7 +1,6 @@
 import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular2/angular2';
 import {ROUTINES} from './mocks/routines';
 import {Routine} from './models/routine';
-import {DatePipe} from 'angular2/angular2';
 import {MessageOrDate} from './pipes/messageordate';
 import {FirebaseService} from './services/firebase-service';
 import {RoutineService} from './services/routine-service';
@@ -44,7 +43,6 @@ class AppComponent {
   
 }
 bootstrap(AppComponent, [
-  DatePipe,
   FirebaseService,
   MessageOrDate,
   RoutineService,

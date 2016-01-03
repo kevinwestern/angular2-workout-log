@@ -47,7 +47,7 @@ var RoutineSnapshot = (function () {
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
             pipes: [messageordate_1.MessageOrDate],
             //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
-            styles: ["\n    :host {\n      display: block;\n    }\n    \n    .name {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    .lift {\n      line-height: 1.5em;\n    }\n    \n    .last-update {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    "]
+            styles: ["\n    :host {\n      display: block;\n    }\n    \n    .name {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    .lift {\n      line-height: 1.5em;\n    }\n    \n    .last-update {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    h3, h5 {\n      margin: 0;\n    }\n    h3 {\n      margin: 8px 0;\n    }\n    h5 {\n      margin-bottom: 8px;\n    }\n    "]
         }), 
         __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, firebase_service_1.FirebaseService, router_1.Router])
     ], RoutineSnapshot);

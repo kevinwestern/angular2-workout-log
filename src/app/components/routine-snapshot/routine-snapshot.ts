@@ -32,6 +32,15 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/rout
       color: rgba(0, 0, 0, .54);
       font-style: italic;
     }
+    h3, h5 {
+      margin: 0;
+    }
+    h3 {
+      margin: 8px 0;
+    }
+    h5 {
+      margin-bottom: 8px;
+    }
     `]
 })
 export class RoutineSnapshot {

@@ -1,8 +1,8 @@
 <div class="card">
-	<span class="name">{{routine.name}}</span>
-  <div *ng-for="#lift of routine.lifts" class="lift">{{lift.name}}</div>
-  <div class="flex horizontal center justified">
-    <span class="last-update">{{routine.lastCompletedTime | messageOrDate:'No last recorded time':'fullDate'}}</span>
+	<h3 class="name">{{routine.name}}</h3>
+  <h5 class="last-update">{{routine.lastCompletedTime | messageOrDate:'No last recorded time'}}</h5>
+  <div>
+    <span>History</span>
     <button (click)="startWorkout()">Start</button>
   </div>
 </div>
