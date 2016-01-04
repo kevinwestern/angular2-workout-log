@@ -30,7 +30,7 @@ var RoutineLogger = (function () {
             templateUrl: '/src/app/components/routine-logger/routine-logger.html',
             directives: [angular2_1.NgFor, angular2_1.NgIf, router_1.ROUTER_DIRECTIVES, angular2_1.FORM_DIRECTIVES],
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
-            styles: ["\n    :host {\n      display: block;\n    }\n    \n    .lift {\n      font-size: 18px;\n    }\n    \n    .short-input {\n      width: 50px;\n      border: none;\n      margin-left: .5em;\n    }\n    \n    .lift-set {\n      line-height: 2em;\n    }\n    \n    .sets {\n      opacity: 1;\n      transition: opacity .2s, transform .2s;\n    }\n    \n    .collapsed {\n      opacity: 0;\n      transform: translateY(-100px);\n    }\n    "]
+            styles: ["\n    :host {\n      display: block;\n    }\n    \n    .lift {\n      font-size: 18px;\n    }\n    \n    .short-input {\n      width: 50px;\n      border: none;\n      border-bottom: solid 1px #ccc;\n      margin-left: .5em;\n    }\n    \n    .short-input:focus {\n      border-bottom-color: #1976D2;\n      outline-width: 0;\n    }\n    \n    .lift-set {\n      line-height: 2em;\n    }  \n    "]
         }), 
         __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, firebase_service_1.FirebaseService])
     ], RoutineLogger);

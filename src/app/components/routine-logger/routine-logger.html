@@ -2,15 +2,17 @@
   <div *ng-if="routineEntry">
     <form (change)="handleChange()">
       <div *ng-for="#entry of routineEntry.liftEntries">
-        <div class="lift">
-          <h3>{{entry.lift.name}}</h3>
-          <div class="sets">
-            <div *ng-for="#set of entry.sets; #setNumber = index" class="lift-set">
-              <span>Set {{setNumber + 1}}:</span>
-              <input type="number" class="short-input" [attr.placeholder]="set.suggestedReps"
-                    [(ng-model)]="set.actualReps">&nbsp;&times;&nbsp;
-              <input type="number" class="short-input" [attr.placeholder]="set.suggestedWeight"
-                    [(ng-model)]="set.actualWeight">
+        <div class="card">
+          <div class="card-content">
+            <h3 class="card-title">{{entry.lift.name}}</h3>
+            <div class="sets">
+              <div *ng-for="#set of entry.sets; #setNumber = index" class="lift-set">
+                <span>Set {{setNumber + 1}}:</span>
+                <input type="number" class="short-input" [attr.placeholder]="set.suggestedReps"
+                      [(ng-model)]="set.actualReps">&nbsp;&times;&nbsp;
+                <input type="number" class="short-input" [attr.placeholder]="set.suggestedWeight"
+                      [(ng-model)]="set.actualWeight">
+              </div>
             </div>
           </div>
         </div>

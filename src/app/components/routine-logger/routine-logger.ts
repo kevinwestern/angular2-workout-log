@@ -25,22 +25,18 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
     .short-input {
       width: 50px;
       border: none;
+      border-bottom: solid 1px #ccc;
       margin-left: .5em;
+    }
+    
+    .short-input:focus {
+      border-bottom-color: #1976D2;
+      outline-width: 0;
     }
     
     .lift-set {
       line-height: 2em;
-    }
-    
-    .sets {
-      opacity: 1;
-      transition: opacity .2s, transform .2s;
-    }
-    
-    .collapsed {
-      opacity: 0;
-      transform: translateY(-100px);
-    }
+    }  
     `]
 })
 export class RoutineLogger {
