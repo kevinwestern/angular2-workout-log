@@ -25,7 +25,7 @@ var FirebaseService = (function () {
         var entriesRef = this.firebase.child('entries');
         var update = {};
         update[entry.id] = {
-            entries: entry.liftEntries
+            lifts: entry.liftEntries
         };
         entriesRef.update(update);
     };
@@ -38,7 +38,8 @@ var FirebaseService = (function () {
         var entriesRef = this.firebase.child('entries');
         var entriesUpdate = {
             routine: entry.routine.name,
-            entries: entry.liftEntries
+            lifts: entry.liftEntries,
+            createdTime: Firebase.ServerValue.TIMESTAMP
         };
         var key = entriesRef.push(entriesUpdate).key();
         return key;

@@ -23,7 +23,7 @@ export class FirebaseService {
     const entriesRef = this.firebase.child('entries');
     const update = {};
     update[entry.id] = {
-      entries: entry.liftEntries
+      lifts: entry.liftEntries
     };
     entriesRef.update(update);
   }
@@ -38,7 +38,8 @@ export class FirebaseService {
     const entriesRef = this.firebase.child('entries');
     const entriesUpdate = {
       routine: entry.routine.name,
-      entries: entry.liftEntries
+      lifts: entry.liftEntries,
+      createdTime: Firebase.ServerValue.TIMESTAMP
     };
     const key = entriesRef.push(entriesUpdate).key();
     return key;

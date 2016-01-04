@@ -20,9 +20,12 @@ var RoutineEntry = (function () {
 })();
 exports.RoutineEntry = RoutineEntry;
 var LiftEntry = (function () {
-    function LiftEntry(lift, sets) {
+    function LiftEntry(lift, sets, createdTime) {
         this.lift = lift;
         this.sets = sets;
+        if (createdTime) {
+            this.createdTime = createdTime;
+        }
     }
     LiftEntry.createSetsFromSuggestions = function (numberOfSets, suggestedWeight) {
         var sets = [];
@@ -32,8 +35,8 @@ var LiftEntry = (function () {
         return sets;
     };
     LiftEntry.fromJson = function (entry) {
-        return entry.entries.map(function (e) {
-            return new LiftEntry(lift_1.Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson));
+        return entry.lifts.map(function (e) {
+            return new LiftEntry(lift_1.Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson), e.createdTime);
         });
     };
     return LiftEntry;

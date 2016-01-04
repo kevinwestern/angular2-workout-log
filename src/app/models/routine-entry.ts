@@ -28,10 +28,14 @@ export class RoutineEntry {
 export class LiftEntry {
   public lift: Lift;
   public sets: SetEntry[];
+  public createdTime: number;
   
-  constructor(lift: Lift, sets: SetEntry[]) {
+  constructor(lift: Lift, sets: SetEntry[], createdTime?: number) {
     this.lift = lift;
     this.sets = sets;
+    if (createdTime) {
+      this.createdTime = createdTime;
+    }
   }
   
   static createSetsFromSuggestions(numberOfSets: number, suggestedWeight: number): SetEntry[] {
@@ -43,8 +47,8 @@ export class LiftEntry {
   }
   
   static fromJson(entry: JSON): LiftEntry[] {
-    return entry.entries.map((e) => {
-      return new LiftEntry(Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson))
+    return entry.lifts.map((e) => {
+      return new LiftEntry(Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson), e.createdTime)
     })
   }
 }

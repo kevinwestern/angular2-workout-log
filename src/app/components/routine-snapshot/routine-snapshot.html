@@ -1,8 +1,10 @@
 <div class="card">
-	<h3 class="name">{{routine.name}}</h3>
-  <h5 class="last-update">{{routine.lastCompletedTime | messageOrDate:'No last recorded time'}}</h5>
+  <div class="card-content">
+    <h3 class="card-title">{{routine.name}}</h3>
+    <h5 class="card-subtitle">{{routine.lastCompletedTime | messageOrDate:'No last recorded time'}}</h5>
+  </div>
   <div>
-    <span>History</span>
-    <button (click)="startWorkout()">Start</button>
+    <span class="card-action">History</span>
+    <button class="card-action primary" (click)="startWorkout()">Start</button>
   </div>
 </div>

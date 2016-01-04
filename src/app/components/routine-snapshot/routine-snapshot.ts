@@ -19,27 +19,14 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/rout
       display: block;
     }
     
-    .name {
+    h3 {
       font-size: 24px;
       font-weight: 500;
     }
     
-    .lift {
-      line-height: 1.5em;
-    }
-    
-    .last-update {
+    h5 {
       color: rgba(0, 0, 0, .54);
       font-style: italic;
-    }
-    h3, h5 {
-      margin: 0;
-    }
-    h3 {
-      margin: 8px 0;
-    }
-    h5 {
-      margin-bottom: 8px;
     }
     `]
 })
