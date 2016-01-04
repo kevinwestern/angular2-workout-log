@@ -2,6 +2,8 @@ import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular
 import {ROUTINES} from './mocks/routines';
 import {Routine} from './models/routine';
 import {MessageOrDate} from './pipes/messageordate';
+import {AppIndexedDB} from './services/database-service';
+import {Database} from './services/database-service';
 import {FirebaseService} from './services/firebase-service';
 import {RoutineService} from './services/routine-service';
 import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
@@ -23,8 +25,9 @@ class RoutineList {
   
   public routines: Routine[]
   
-  constructor(firebaseService: FirebaseService) {
+  constructor(firebaseService: FirebaseService, database: Database) {
     firebaseService.getRoutines().then((routines: Routine[]) => this.routines = routines);
+    //database.getRoutines().then((r) => console.log(r));
   }
 }
 
@@ -43,6 +46,8 @@ class AppComponent {
   
 }
 bootstrap(AppComponent, [
+  AppIndexedDB,
+  Database,
   FirebaseService,
   MessageOrDate,
   RoutineService,
