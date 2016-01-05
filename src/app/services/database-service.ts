@@ -1,4 +1,6 @@
 import {Injectable} from 'angular2/angular2';
+import {Routine} from '../models/routine';
+
 
 const toPromise = (src, eventName) => {
   return new Promise((resolve, reject) => {
@@ -12,36 +14,25 @@ export class AppIndexedDB {
   private db: Promise<IDBDatabase>;
   
   constructor() {
-    this.openRequest = window.indexedDB.open('aa', 1);
+    this.openRequest = window.indexedDB.open('a', 1);
     this.db = new Promise((resolve, reject) => {
       this.openRequest.onupgradeneeded = (e: IDBVersionChangeEvent) => {
-        this._upgradeDb(e.target.result);
-        resolve(e.target.result);
+        this._upgradeDb(e.target.result).then(resolve);
       };
       this.openRequest.onsuccess = (e: Event) => resolve(e.target.result);
     });
   }
   
-  _upgradeDb(db: IDBDatabase) {
+  _upgradeDb(db: IDBDatabase): Promise<IDBDatabase> {
     const routinesStore = db.createObjectStore('routines', {keyPath: 'name'});
     const liftsStore = db.createObjectStore('lifts', {keyPath: 'name'});
     const entriesStore = db.createObjectStore('entries', {keyPath: 'key'});
-    //const a = toPromise(routinesStore.transaction, 'oncomplete');
-    ///const b= toPromise(liftsStore.transaction, 'oncomplete');
-   // b.then(() => {
-    //  console.log('ook');
-      //const routines = db.transaction('routines', 'readwrite').objectStore('routines');
-      // _SEED_DATA_ROUTINES.forEach((routine: any) => routines.add(routine));
-   // });
-    /*Promise.all([
-      toPromise(routinesStore.transaction, 'oncomplete'),
-      toPromise(liftsStore.transaction, 'oncomplete'),
-    ]).then(() => {
-      console.log('whatup');
-    })*/
-    toPromise(routinesStore.transaction, 'oncomplete').then(
-      () => toPromise(liftsStore.transaction, 'oncomplete')).then(
-      () => toPromise(entriesStore.transaction, 'oncomplete')).then(() => console.log('ok'))
+    const completed = toPromise(routinesStore.transaction, 'oncomplete');
+    return completed.then(() => {
+      const routines = db.transaction('routines', 'readwrite').objectStore('routines');
+       _SEED_DATA_ROUTINES.forEach((routine: any) => routines.add(routine));
+       return db;
+    });
   }
   
   getRoutines(): Promise<any[]> {
@@ -73,9 +64,9 @@ export class Database {
     
   }
   
-  getRoutines(): Promise<any[]> {
+  getRoutines(): Promise<Routine[]> {
     // TODO: Check connection
-    return this.db.getRoutines();
+    return this.db.getRoutines().then((routines) => routines.map(Routine.fromJson));
   }
 }
 

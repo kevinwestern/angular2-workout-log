@@ -26,8 +26,7 @@ class RoutineList {
   public routines: Routine[]
   
   constructor(firebaseService: FirebaseService, database: Database) {
-    firebaseService.getRoutines().then((routines: Routine[]) => this.routines = routines);
-    //database.getRoutines().then((r) => console.log(r));
+    database.getRoutines().then((routines: Routine[]) => this.routines = routines);
   }
 }
 

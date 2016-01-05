@@ -21,8 +21,7 @@ var router_1 = require('angular2/router');
 var RoutineList = (function () {
     function RoutineList(firebaseService, database) {
         var _this = this;
-        firebaseService.getRoutines().then(function (routines) { return _this.routines = routines; });
-        //database.getRoutines().then((r) => console.log(r));
+        database.getRoutines().then(function (routines) { return _this.routines = routines; });
     }
     RoutineList = __decorate([
         angular2_1.Component({

@@ -16,7 +16,7 @@ var MessageOrDate = (function () {
     MessageOrDate.prototype.transform = function (value, args) {
         if (value) {
             var diff = moment().diff(value, 'days');
-            return diff ? ' days ago' : 'Recorded today.';
+            return diff ? diff + " days ago" : 'Recorded today.';
         }
         return args[0];
     };

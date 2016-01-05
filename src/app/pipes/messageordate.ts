@@ -6,7 +6,7 @@ export class MessageOrDate {
   transform(value: number, args:string[]): String {
     if (value) {
       const diff = moment().diff(value, 'days');
-      return diff ? ' days ago' : 'Recorded today.';
+      return diff ? `${diff} days ago` : 'Recorded today.';
     }
     return args[0];
   }

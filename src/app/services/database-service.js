@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
+var routine_1 = require('../models/routine');
 var toPromise = function (src, eventName) {
     return new Promise(function (resolve, reject) {
         src[eventName] = function () { return resolve(); };
@@ -18,11 +19,10 @@ var toPromise = function (src, eventName) {
 var AppIndexedDB = (function () {
     function AppIndexedDB() {
         var _this = this;
-        this.openRequest = window.indexedDB.open('aa', 1);
+        this.openRequest = window.indexedDB.open('a', 1);
         this.db = new Promise(function (resolve, reject) {
             _this.openRequest.onupgradeneeded = function (e) {
-                _this._upgradeDb(e.target.result);
-                resolve(e.target.result);
+                _this._upgradeDb(e.target.result).then(resolve);
             };
             _this.openRequest.onsuccess = function (e) { return resolve(e.target.result); };
         });
@@ -31,20 +31,12 @@ var AppIndexedDB = (function () {
         var routinesStore = db.createObjectStore('routines', { keyPath: 'name' });
         var liftsStore = db.createObjectStore('lifts', { keyPath: 'name' });
         var entriesStore = db.createObjectStore('entries', { keyPath: 'key' });
-        //const a = toPromise(routinesStore.transaction, 'oncomplete');
-        ///const b= toPromise(liftsStore.transaction, 'oncomplete');
-        // b.then(() => {
-        //  console.log('ook');
-        //const routines = db.transaction('routines', 'readwrite').objectStore('routines');
-        // _SEED_DATA_ROUTINES.forEach((routine: any) => routines.add(routine));
-        // });
-        /*Promise.all([
-          toPromise(routinesStore.transaction, 'oncomplete'),
-          toPromise(liftsStore.transaction, 'oncomplete'),
-        ]).then(() => {
-          console.log('whatup');
-        })*/
-        toPromise(routinesStore.transaction, 'oncomplete').then(function () { return toPromise(liftsStore.transaction, 'oncomplete'); }).then(function () { return toPromise(entriesStore.transaction, 'oncomplete'); }).then(function () { return console.log('ok'); });
+        var completed = toPromise(routinesStore.transaction, 'oncomplete');
+        return completed.then(function () {
+            var routines = db.transaction('routines', 'readwrite').objectStore('routines');
+            _SEED_DATA_ROUTINES.forEach(function (routine) { return routines.add(routine); });
+            return db;
+        });
     };
     AppIndexedDB.prototype.getRoutines = function () {
         return this.db.then(function (db) {
@@ -81,7 +73,7 @@ var Database = (function () {
     }
     Database.prototype.getRoutines = function () {
         // TODO: Check connection
-        return this.db.getRoutines();
+        return this.db.getRoutines().then(function (routines) { return routines.map(routine_1.Routine.fromJson); });
     };
     Database = __decorate([
         angular2_1.Injectable(), 
