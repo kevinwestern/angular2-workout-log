@@ -1,7 +1,7 @@
 import {Component, NgFor, Input} from 'angular2/angular2';
 import {Routine} from '../../models/routine';
 import {RoutineEntry} from '../../models/routine-entry';
-import {FirebaseService} from '../../services/firebase-service';
+import {Database} from '../../services/database-service';
 import {RoutineService} from '../../services/routine-service';
 import {MessageOrDate} from '../../pipes/messageordate';
 import {ViewEncapsulation} from 'angular2/angular2';
@@ -37,19 +37,19 @@ export class RoutineSnapshot {
   constructor(
     private params: RouteParams,
     private routineService: RoutineService,
-    private firebase: FirebaseService,
+    private database: Database,
     private router: Router) {
     let id = params.get('id');
     if (id != null) {
       this.routine = routineService.get(parseInt(id, 10));
     }
-    this.firebase = firebase;
   }
   
   startWorkout() {
     if (this.routine) {
-      const id = this.firebase.createRoutineEntry(new RoutineEntry(this.routine));
-      this.router.navigate(['/RoutineLogger', {id}])
+      this.database.createRoutineEntry(new RoutineEntry(this.routine)).then((id) => {
+        this.router.navigate(['/RoutineLogger', {id}])
+      })
     }
   }
 }

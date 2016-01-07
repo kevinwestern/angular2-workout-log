@@ -10,19 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var firebase_service_1 = require('../../services/firebase-service');
+var database_service_1 = require('../../services/database-service');
 var routine_service_1 = require('../../services/routine-service');
 var angular2_2 = require('angular2/angular2');
 var router_1 = require('angular2/router');
 var RoutineLogger = (function () {
-    function RoutineLogger(params, routineService, firebase) {
+    function RoutineLogger(params, routineService, database) {
         var _this = this;
         var id = params.get('id');
-        this.firebase = firebase;
-        this.firebase.getRoutineEntry(id).then(function (re) { return _this.routineEntry = re; });
+        this.database = database;
+        this.database.getRoutineEntry(id).then(function (re) { return _this.routineEntry = re; });
     }
     RoutineLogger.prototype.handleChange = function (e) {
-        this.firebase.saveRoutineEntry(this.routineEntry);
+        //this.firebase.saveRoutineEntry(this.routineEntry)
     };
     RoutineLogger = __decorate([
         angular2_1.Component({
@@ -32,7 +32,7 @@ var RoutineLogger = (function () {
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
             styles: ["\n    :host {\n      display: block;\n    }\n    \n    .lift {\n      font-size: 18px;\n    }\n    \n    .short-input {\n      width: 50px;\n      border: none;\n      border-bottom: solid 1px #ccc;\n      margin-left: .5em;\n    }\n    \n    .short-input:focus {\n      border-bottom-color: #1976D2;\n      outline-width: 0;\n    }\n    \n    .lift-set {\n      line-height: 2em;\n    }  \n    "]
         }), 
-        __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, firebase_service_1.FirebaseService])
+        __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, database_service_1.Database])
     ], RoutineLogger);
     return RoutineLogger;
 })();

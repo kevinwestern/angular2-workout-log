@@ -19,7 +19,7 @@ var toPromise = function (src, eventName) {
 var AppIndexedDB = (function () {
     function AppIndexedDB() {
         var _this = this;
-        this.openRequest = window.indexedDB.open('a', 1);
+        this.openRequest = window.indexedDB.open('e', 1);
         this.db = new Promise(function (resolve, reject) {
             _this.openRequest.onupgradeneeded = function (e) {
                 _this._upgradeDb(e.target.result).then(resolve);
@@ -30,7 +30,7 @@ var AppIndexedDB = (function () {
     AppIndexedDB.prototype._upgradeDb = function (db) {
         var routinesStore = db.createObjectStore('routines', { keyPath: 'name' });
         var liftsStore = db.createObjectStore('lifts', { keyPath: 'name' });
-        var entriesStore = db.createObjectStore('entries', { keyPath: 'key' });
+        var entriesStore = db.createObjectStore('entries', { keyPath: '_key', autoIncrement: true });
         var completed = toPromise(routinesStore.transaction, 'oncomplete');
         return completed.then(function () {
             var routines = db.transaction('routines', 'readwrite').objectStore('routines');
@@ -57,6 +57,19 @@ var AppIndexedDB = (function () {
             });
         });
     };
+    AppIndexedDB.prototype.createRoutineEntry = function (entry) {
+        return this.db.then(function (db) {
+            var transaction = db.transaction(["entries"], "readwrite");
+            return new Promise(function (resolve, reject) {
+                var id = null;
+                transaction.oncomplete = function () { resolve(id); };
+                transaction.onerror = reject;
+                var request = transaction.objectStore("entries").add(new routine_1.Routine("test", []));
+                request.onsuccess = function (e) { id = e.target.result; };
+                request.onerror = reject;
+            });
+        });
+    };
     AppIndexedDB = __decorate([
         angular2_1.Injectable(), 
         __metadata('design:paramtypes', [])
@@ -74,6 +87,9 @@ var Database = (function () {
     Database.prototype.getRoutines = function () {
         // TODO: Check connection
         return this.db.getRoutines().then(function (routines) { return routines.map(routine_1.Routine.fromJson); });
+    };
+    Database.prototype.createRoutineEntry = function (entry) {
+        return this.db.createRoutineEntry(entry);
     };
     Database = __decorate([
         angular2_1.Injectable(), 

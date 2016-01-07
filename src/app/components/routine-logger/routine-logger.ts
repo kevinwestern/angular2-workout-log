@@ -2,7 +2,7 @@ import {Component, NgFor, NgIf, Input, Output, Directive, FORM_DIRECTIVES} from 
 import {Lift} from '../../models/lift';
 import {Routine} from '../../models/routine';
 import {RoutineEntry} from '../../models/routine-entry';
-import {FirebaseService} from '../../services/firebase-service';
+import {Database} from '../../services/database-service';
 import {RoutineService} from '../../services/routine-service';
 import {ViewEncapsulation} from 'angular2/angular2';
 import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
@@ -40,16 +40,16 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
     `]
 })
 export class RoutineLogger {
-  private firebase: FirebaseService;
+  private database: Database;
   public routineEntry: RoutineEntry;
   
-  constructor(params: RouteParams, routineService: RoutineService, firebase: FirebaseService) {
+  constructor(params: RouteParams, routineService: RoutineService, database: Database) {
     const id = params.get('id');
-    this.firebase = firebase;
-    this.firebase.getRoutineEntry(id).then((re) => this.routineEntry = re)
+    this.database = database;
+    this.database.getRoutineEntry(id).then((re) => this.routineEntry = re)
   }
   
   handleChange(e) {
-    this.firebase.saveRoutineEntry(this.routineEntry)
+    //this.firebase.saveRoutineEntry(this.routineEntry)
   }
 }

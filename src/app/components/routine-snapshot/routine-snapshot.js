@@ -12,27 +12,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var angular2_1 = require('angular2/angular2');
 var routine_1 = require('../../models/routine');
 var routine_entry_1 = require('../../models/routine-entry');
-var firebase_service_1 = require('../../services/firebase-service');
+var database_service_1 = require('../../services/database-service');
 var routine_service_1 = require('../../services/routine-service');
 var messageordate_1 = require('../../pipes/messageordate');
 var angular2_2 = require('angular2/angular2');
 var router_1 = require('angular2/router');
 var RoutineSnapshot = (function () {
-    function RoutineSnapshot(params, routineService, firebase, router) {
+    function RoutineSnapshot(params, routineService, database, router) {
         this.params = params;
         this.routineService = routineService;
-        this.firebase = firebase;
+        this.database = database;
         this.router = router;
         var id = params.get('id');
         if (id != null) {
             this.routine = routineService.get(parseInt(id, 10));
         }
-        this.firebase = firebase;
     }
     RoutineSnapshot.prototype.startWorkout = function () {
+        var _this = this;
         if (this.routine) {
-            var id = this.firebase.createRoutineEntry(new routine_entry_1.RoutineEntry(this.routine));
-            this.router.navigate(['/RoutineLogger', { id: id }]);
+            this.database.createRoutineEntry(new routine_entry_1.RoutineEntry(this.routine)).then(function (id) {
+                _this.router.navigate(['/RoutineLogger', { id: id }]);
+            });
         }
     };
     __decorate([
@@ -49,7 +50,7 @@ var RoutineSnapshot = (function () {
             //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
             styles: ["\n    :host {\n      display: block;\n    }\n    \n    h3 {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    h5 {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    "]
         }), 
-        __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, firebase_service_1.FirebaseService, router_1.Router])
+        __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, database_service_1.Database, router_1.Router])
     ], RoutineSnapshot);
     return RoutineSnapshot;
 })();

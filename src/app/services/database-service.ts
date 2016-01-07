@@ -1,5 +1,7 @@
 import {Injectable} from 'angular2/angular2';
 import {Routine} from '../models/routine';
+import {RoutineEntry} from '../models/routine-entry';
+
 
 
 const toPromise = (src, eventName) => {
@@ -14,7 +16,7 @@ export class AppIndexedDB {
   private db: Promise<IDBDatabase>;
   
   constructor() {
-    this.openRequest = window.indexedDB.open('a', 1);
+    this.openRequest = window.indexedDB.open('e', 1);
     this.db = new Promise((resolve, reject) => {
       this.openRequest.onupgradeneeded = (e: IDBVersionChangeEvent) => {
         this._upgradeDb(e.target.result).then(resolve);
@@ -26,7 +28,7 @@ export class AppIndexedDB {
   _upgradeDb(db: IDBDatabase): Promise<IDBDatabase> {
     const routinesStore = db.createObjectStore('routines', {keyPath: 'name'});
     const liftsStore = db.createObjectStore('lifts', {keyPath: 'name'});
-    const entriesStore = db.createObjectStore('entries', {keyPath: 'key'});
+    const entriesStore = db.createObjectStore('entries', {keyPath: '_key', autoIncrement: true});
     const completed = toPromise(routinesStore.transaction, 'oncomplete');
     return completed.then(() => {
       const routines = db.transaction('routines', 'readwrite').objectStore('routines');
@@ -53,6 +55,20 @@ export class AppIndexedDB {
       });
     });
   }
+  
+  createRoutineEntry(entry: RoutineEntry): Promise<number> {
+    return this.db.then((db) => {
+      const transaction = db.transaction(["entries"], "readwrite");
+      return new Promise((resolve, reject) => {
+        let id = null;
+        transaction.oncomplete = () => {resolve(id)};
+        transaction.onerror = reject;
+        const request = transaction.objectStore("entries").add(new Routine("test", []));
+        request.onsuccess = (e) => {id = e.target.result;};
+        request.onerror = reject;  
+      });
+    });
+  }
 }
 
 /**
@@ -67,6 +83,10 @@ export class Database {
   getRoutines(): Promise<Routine[]> {
     // TODO: Check connection
     return this.db.getRoutines().then((routines) => routines.map(Routine.fromJson));
+  }
+  
+  createRoutineEntry(entry: RoutineEntry): Promise<number> {
+    return this.db.createRoutineEntry(entry);
   }
 }
 
