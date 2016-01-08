@@ -13,6 +13,13 @@ var RoutineEntry = (function () {
         });
         return result;
     };
+    RoutineEntry.prototype.toJson = function () {
+        return {
+            routine: this.routine.toJson(),
+            liftEntries: this.liftEntries.map(function (le) { return le.toJson(); }),
+            id: this.id
+        };
+    };
     RoutineEntry.fromJson = function (id, routine, entry) {
         return new RoutineEntry(routine_1.Routine.fromJson(routine), LiftEntry.fromJson(entry), id);
     };
@@ -27,6 +34,13 @@ var LiftEntry = (function () {
             this.createdTime = createdTime;
         }
     }
+    LiftEntry.prototype.toJson = function () {
+        return {
+            lift: this.lift.toJson(),
+            sets: this.sets.map(function (set) { return set.toJson(); }),
+            createdTime: this.createdTime
+        };
+    };
     LiftEntry.createSetsFromSuggestions = function (numberOfSets, suggestedWeight) {
         var sets = [];
         for (var i = 0; i < numberOfSets; i++) {
@@ -35,7 +49,7 @@ var LiftEntry = (function () {
         return sets;
     };
     LiftEntry.fromJson = function (entry) {
-        return entry.lifts.map(function (e) {
+        return entry.liftEntries.map(function (e) {
             return new LiftEntry(lift_1.Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson), e.createdTime);
         });
     };
@@ -45,8 +59,18 @@ exports.LiftEntry = LiftEntry;
 var SetEntry = (function () {
     function SetEntry(suggestedReps, suggestedWeight, actualReps, actualWeight) {
         this.suggestedReps = suggestedReps;
+        this.actualReps = actualReps;
         this.suggestedWeight = suggestedWeight;
+        this.actualWeight = actualWeight;
     }
+    SetEntry.prototype.toJson = function () {
+        return {
+            suggestedReps: this.suggestedReps,
+            actualReps: this.actualReps,
+            suggestedWeight: this.suggestedWeight,
+            actualWeight: this.actualWeight
+        };
+    };
     SetEntry.fromJson = function (json) {
         return new SetEntry(json.suggestedReps, json.suggestedWeight, json.actualReps, json.actualWeight);
     };

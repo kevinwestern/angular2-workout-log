@@ -20,6 +20,14 @@ export class RoutineEntry {
     return result;
   }
   
+  public toJson(): any {
+    return {
+      routine: this.routine.toJson(),
+      liftEntries: this.liftEntries.map((le) => le.toJson()),
+      id: this.id
+    }; 
+  }
+  
   static fromJson(id: string, routine: JSON, entry: JSON): RoutineEntry {
     return new RoutineEntry(Routine.fromJson(routine), LiftEntry.fromJson(entry), id);
   }
@@ -38,6 +46,14 @@ export class LiftEntry {
     }
   }
   
+  toJson(): any {
+    return {
+      lift: this.lift.toJson(),
+      sets: this.sets.map((set) => set.toJson()),
+      createdTime: this.createdTime
+    };
+  }
+  
   static createSetsFromSuggestions(numberOfSets: number, suggestedWeight: number): SetEntry[] {
     const sets = [];
     for (let i = 0; i < numberOfSets; i++) {
@@ -47,7 +63,7 @@ export class LiftEntry {
   }
   
   static fromJson(entry: JSON): LiftEntry[] {
-    return entry.lifts.map((e) => {
+    return entry.liftEntries.map((e) => {
       return new LiftEntry(Lift.fromJson(e.lift), e.sets.map(SetEntry.fromJson), e.createdTime)
     })
   }
@@ -61,7 +77,18 @@ export class SetEntry {
   
   constructor(suggestedReps: number, suggestedWeight: number, actualReps?: number, actualWeight?: number) {
     this.suggestedReps = suggestedReps;
+    this.actualReps = actualReps;
     this.suggestedWeight = suggestedWeight;
+    this.actualWeight = actualWeight;
+  }
+  
+  toJson(): any {
+    return {
+      suggestedReps: this.suggestedReps,
+      actualReps: this.actualReps,
+      suggestedWeight: this.suggestedWeight,
+      actualWeight: this.actualWeight
+    };
   }
   
   static fromJson(json: JSON): SetEntry {

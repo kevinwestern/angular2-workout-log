@@ -7,6 +7,13 @@ export class Lift {
     this.name = name;
   }
   
+  toJson(): any {
+    return {
+      sets: this.sets,
+      name: this.name
+    };
+  }
+  
   static fromJson(json: JSON): Lift {
     return new Lift(json.sets, json.name);
   }

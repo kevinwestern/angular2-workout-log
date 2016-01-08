@@ -5,6 +5,13 @@ var Routine = (function () {
         this.lifts = lifts;
         this.lastCompletedTime = lastCompletedTime;
     }
+    Routine.prototype.toJson = function () {
+        return {
+            name: this.name,
+            lifts: this.lifts.map(function (lift) { return lift.toJson(); }),
+            lastCompletedTime: this.lastCompletedTime
+        };
+    };
     Routine.fromJson = function (json) {
         return new Routine(json.name, json.lifts.map(lift_1.Lift.fromJson), json.lastCompletedTime);
     };

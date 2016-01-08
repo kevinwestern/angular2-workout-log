@@ -11,63 +11,40 @@ const toPromise = (src, eventName) => {
 };
 
 @Injectable()
-export class AppIndexedDB {
-  private openRequest: IDBOpenDBRequest;
-  private db: Promise<IDBDatabase>;
-  
+export class AppLocalStorage {
   constructor() {
-    this.openRequest = window.indexedDB.open('e', 1);
-    this.db = new Promise((resolve, reject) => {
-      this.openRequest.onupgradeneeded = (e: IDBVersionChangeEvent) => {
-        this._upgradeDb(e.target.result).then(resolve);
-      };
-      this.openRequest.onsuccess = (e: Event) => resolve(e.target.result);
-    });
+    if (!localStorage.getItem('routines')) {
+      localStorage.setItem('routines', JSON.stringify(_SEED_DATA_ROUTINES))
+    }
+    if (!localStorage.getItem('entries')) {
+      localStorage.setItem('entries', "{}");
+    }
   }
   
-  _upgradeDb(db: IDBDatabase): Promise<IDBDatabase> {
-    const routinesStore = db.createObjectStore('routines', {keyPath: 'name'});
-    const liftsStore = db.createObjectStore('lifts', {keyPath: 'name'});
-    const entriesStore = db.createObjectStore('entries', {keyPath: '_key', autoIncrement: true});
-    const completed = toPromise(routinesStore.transaction, 'oncomplete');
-    return completed.then(() => {
-      const routines = db.transaction('routines', 'readwrite').objectStore('routines');
-       _SEED_DATA_ROUTINES.forEach((routine: any) => routines.add(routine));
-       return db;
-    });
+  getRoutines(): any[] {
+    return JSON.parse(localStorage.getItem('routines'));
   }
   
-  getRoutines(): Promise<any[]> {
-    return this.db.then((db) => {
-      const cursorReq = db.transaction('routines', 'readonly').objectStore('routines').openCursor();
-      const routines = [];
-      return new Promise((resolve, reject) => {
-        cursorReq.onsuccess = (e) => {
-          const cursor: IDBCursor = e.target.result;
-          if (cursor) {
-            routines.push(cursor.value);
-            cursor.continue();
-          } else {
-            resolve(routines);
-          }
-        };
-        cursorReq.onerror = reject;
-      });
-    });
+  createRoutineEntry(entry: RoutineEntry): number {
+    // super unique id generator
+    const id = Date.now() + Math.floor(Math.random() * 1000);
+    this.saveRoutineEntry(entry, id);
+    return id;
   }
   
-  createRoutineEntry(entry: RoutineEntry): Promise<number> {
-    return this.db.then((db) => {
-      const transaction = db.transaction(["entries"], "readwrite");
-      return new Promise((resolve, reject) => {
-        let id = null;
-        transaction.oncomplete = () => {resolve(id)};
-        transaction.onerror = reject;
-        const request = transaction.objectStore("entries").add(new Routine("test", []));
-        request.onsuccess = (e) => {id = e.target.result;};
-        request.onerror = reject;  
-      });
-    });
+  saveRoutineEntry(entry: RoutineEntry, id: number) {
+    const entries = JSON.parse(localStorage.getItem('entries'));
+    entries[id] = entry.toJson();
+    entries[id].id = id;
+    localStorage.setItem('entries', JSON.stringify(entries));
+  }
+  
+  getRoutineEntry(id: number): any {
+    return JSON.parse(localStorage.getItem('entries'))[id];
+  }
+  
+  getRoutine(name: string): any {
+    return this.getRoutines().find((r) => r.name == name);
   }
 }
 
@@ -76,17 +53,28 @@ export class AppIndexedDB {
  */
 @Injectable()
 export class Database {
-  constructor(private db: AppIndexedDB) {
-    
-  }
+  constructor(private db: AppLocalStorage) {}
   
   getRoutines(): Promise<Routine[]> {
     // TODO: Check connection
-    return this.db.getRoutines().then((routines) => routines.map(Routine.fromJson));
+    return Promise.resolve(this.db.getRoutines().map(Routine.fromJson));
   }
   
   createRoutineEntry(entry: RoutineEntry): Promise<number> {
-    return this.db.createRoutineEntry(entry);
+    // TODO: Check connection
+    return Promise.resolve(this.db.createRoutineEntry(entry));
+  }
+  
+  saveRoutineEntry(entry: RoutineEntry, id: number): Promise<void> {
+    this.db.saveRoutineEntry(entry, id);
+    return Promise.resolve();
+  }
+  
+  getRoutineEntry(id: number): Promise<RoutineEntry> {
+    // TODO: Check connection
+    const entry = this.db.getRoutineEntry(id);
+    const routine = this.db.getRoutine(entry.routine.name);
+    return Promise.resolve(RoutineEntry.fromJson(entry.id, routine , entry));
   }
 }
 

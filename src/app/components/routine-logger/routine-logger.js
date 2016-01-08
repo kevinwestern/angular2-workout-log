@@ -17,12 +17,14 @@ var router_1 = require('angular2/router');
 var RoutineLogger = (function () {
     function RoutineLogger(params, routineService, database) {
         var _this = this;
-        var id = params.get('id');
+        this.id = Number(params.get('id'));
         this.database = database;
-        this.database.getRoutineEntry(id).then(function (re) { return _this.routineEntry = re; });
+        this.database.getRoutineEntry(this.id).then(function (re) {
+            _this.routineEntry = re;
+        });
     }
     RoutineLogger.prototype.handleChange = function (e) {
-        //this.firebase.saveRoutineEntry(this.routineEntry)
+        this.database.saveRoutineEntry(this.routineEntry, this.id);
     };
     RoutineLogger = __decorate([
         angular2_1.Component({

@@ -41,15 +41,18 @@ import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
 })
 export class RoutineLogger {
   private database: Database;
+  private id: number;
   public routineEntry: RoutineEntry;
   
   constructor(params: RouteParams, routineService: RoutineService, database: Database) {
-    const id = params.get('id');
+    this.id = Number(params.get('id'));
     this.database = database;
-    this.database.getRoutineEntry(id).then((re) => this.routineEntry = re)
+    this.database.getRoutineEntry(this.id).then((re) => {
+      this.routineEntry = re;
+    });
   }
   
   handleChange(e) {
-    //this.firebase.saveRoutineEntry(this.routineEntry)
+    this.database.saveRoutineEntry(this.routineEntry, this.id);
   }
 }

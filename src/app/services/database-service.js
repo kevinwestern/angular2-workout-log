@@ -11,72 +11,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var angular2_1 = require('angular2/angular2');
 var routine_1 = require('../models/routine');
+var routine_entry_1 = require('../models/routine-entry');
 var toPromise = function (src, eventName) {
     return new Promise(function (resolve, reject) {
         src[eventName] = function () { return resolve(); };
     });
 };
-var AppIndexedDB = (function () {
-    function AppIndexedDB() {
-        var _this = this;
-        this.openRequest = window.indexedDB.open('e', 1);
-        this.db = new Promise(function (resolve, reject) {
-            _this.openRequest.onupgradeneeded = function (e) {
-                _this._upgradeDb(e.target.result).then(resolve);
-            };
-            _this.openRequest.onsuccess = function (e) { return resolve(e.target.result); };
-        });
+var AppLocalStorage = (function () {
+    function AppLocalStorage() {
+        if (!localStorage.getItem('routines')) {
+            localStorage.setItem('routines', JSON.stringify(_SEED_DATA_ROUTINES));
+        }
+        if (!localStorage.getItem('entries')) {
+            localStorage.setItem('entries', "{}");
+        }
     }
-    AppIndexedDB.prototype._upgradeDb = function (db) {
-        var routinesStore = db.createObjectStore('routines', { keyPath: 'name' });
-        var liftsStore = db.createObjectStore('lifts', { keyPath: 'name' });
-        var entriesStore = db.createObjectStore('entries', { keyPath: '_key', autoIncrement: true });
-        var completed = toPromise(routinesStore.transaction, 'oncomplete');
-        return completed.then(function () {
-            var routines = db.transaction('routines', 'readwrite').objectStore('routines');
-            _SEED_DATA_ROUTINES.forEach(function (routine) { return routines.add(routine); });
-            return db;
-        });
+    AppLocalStorage.prototype.getRoutines = function () {
+        return JSON.parse(localStorage.getItem('routines'));
     };
-    AppIndexedDB.prototype.getRoutines = function () {
-        return this.db.then(function (db) {
-            var cursorReq = db.transaction('routines', 'readonly').objectStore('routines').openCursor();
-            var routines = [];
-            return new Promise(function (resolve, reject) {
-                cursorReq.onsuccess = function (e) {
-                    var cursor = e.target.result;
-                    if (cursor) {
-                        routines.push(cursor.value);
-                        cursor.continue();
-                    }
-                    else {
-                        resolve(routines);
-                    }
-                };
-                cursorReq.onerror = reject;
-            });
-        });
+    AppLocalStorage.prototype.createRoutineEntry = function (entry) {
+        // super unique id generator
+        var id = Date.now() + Math.floor(Math.random() * 1000);
+        this.saveRoutineEntry(entry, id);
+        return id;
     };
-    AppIndexedDB.prototype.createRoutineEntry = function (entry) {
-        return this.db.then(function (db) {
-            var transaction = db.transaction(["entries"], "readwrite");
-            return new Promise(function (resolve, reject) {
-                var id = null;
-                transaction.oncomplete = function () { resolve(id); };
-                transaction.onerror = reject;
-                var request = transaction.objectStore("entries").add(new routine_1.Routine("test", []));
-                request.onsuccess = function (e) { id = e.target.result; };
-                request.onerror = reject;
-            });
-        });
+    AppLocalStorage.prototype.saveRoutineEntry = function (entry, id) {
+        var entries = JSON.parse(localStorage.getItem('entries'));
+        entries[id] = entry.toJson();
+        entries[id].id = id;
+        localStorage.setItem('entries', JSON.stringify(entries));
     };
-    AppIndexedDB = __decorate([
+    AppLocalStorage.prototype.getRoutineEntry = function (id) {
+        return JSON.parse(localStorage.getItem('entries'))[id];
+    };
+    AppLocalStorage.prototype.getRoutine = function (name) {
+        return this.getRoutines().find(function (r) { return r.name == name; });
+    };
+    AppLocalStorage = __decorate([
         angular2_1.Injectable(), 
         __metadata('design:paramtypes', [])
-    ], AppIndexedDB);
-    return AppIndexedDB;
+    ], AppLocalStorage);
+    return AppLocalStorage;
 })();
-exports.AppIndexedDB = AppIndexedDB;
+exports.AppLocalStorage = AppLocalStorage;
 /**
  * Database Service provides offline saving to IndexedDB.
  */
@@ -86,14 +63,25 @@ var Database = (function () {
     }
     Database.prototype.getRoutines = function () {
         // TODO: Check connection
-        return this.db.getRoutines().then(function (routines) { return routines.map(routine_1.Routine.fromJson); });
+        return Promise.resolve(this.db.getRoutines().map(routine_1.Routine.fromJson));
     };
     Database.prototype.createRoutineEntry = function (entry) {
-        return this.db.createRoutineEntry(entry);
+        // TODO: Check connection
+        return Promise.resolve(this.db.createRoutineEntry(entry));
+    };
+    Database.prototype.saveRoutineEntry = function (entry, id) {
+        this.db.saveRoutineEntry(entry, id);
+        return Promise.resolve();
+    };
+    Database.prototype.getRoutineEntry = function (id) {
+        // TODO: Check connection
+        var entry = this.db.getRoutineEntry(id);
+        var routine = this.db.getRoutine(entry.routine.name);
+        return Promise.resolve(routine_entry_1.RoutineEntry.fromJson(entry.id, routine, entry));
     };
     Database = __decorate([
         angular2_1.Injectable(), 
-        __metadata('design:paramtypes', [AppIndexedDB])
+        __metadata('design:paramtypes', [AppLocalStorage])
     ], Database);
     return Database;
 })();
