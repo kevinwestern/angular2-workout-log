@@ -13,7 +13,6 @@ var angular2_1 = require('angular2/angular2');
 var messageordate_1 = require('./pipes/messageordate');
 var database_service_1 = require('./services/database-service');
 var database_service_2 = require('./services/database-service');
-var routine_service_1 = require('./services/routine-service');
 var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
 var routine_logger_1 = require('./components/routine-logger/routine-logger');
 var router_1 = require('angular2/router');
@@ -55,7 +54,6 @@ angular2_1.bootstrap(AppComponent, [
     database_service_1.AppLocalStorage,
     database_service_2.Database,
     messageordate_1.MessageOrDate,
-    routine_service_1.RoutineService,
     router_1.ROUTER_BINDINGS,
     angular2_1.bind(router_1.APP_BASE_HREF).toValue('/src')
 ]);

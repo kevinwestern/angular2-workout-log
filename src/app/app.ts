@@ -1,10 +1,8 @@
 import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular2/angular2';
-import {ROUTINES} from './mocks/routines';
-import {Routine} from './models/routine';
+import {Routine} from './models';
 import {MessageOrDate} from './pipes/messageordate';
 import {AppLocalStorage} from './services/database-service';
 import {Database} from './services/database-service';
-import {RoutineService} from './services/routine-service';
 import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
 import {RoutineLogger} from './components/routine-logger/routine-logger';
 import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDINGS} from 'angular2/router'
@@ -20,7 +18,6 @@ import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDI
   directives: [RoutineSnapshot, NgFor, ROUTER_DIRECTIVES],
 })
 class RoutineList {
-  private routineService: RoutineService;
   
   public routines: Routine[]
   
@@ -47,7 +44,6 @@ bootstrap(AppComponent, [
   AppLocalStorage,
   Database,
   MessageOrDate,
-  RoutineService,
   ROUTER_BINDINGS,
   bind(APP_BASE_HREF).toValue('/src')
  ]);

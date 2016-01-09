@@ -10,35 +10,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var routine_1 = require('../../models/routine');
-var routine_entry_1 = require('../../models/routine-entry');
 var database_service_1 = require('../../services/database-service');
-var routine_service_1 = require('../../services/routine-service');
 var messageordate_1 = require('../../pipes/messageordate');
 var angular2_2 = require('angular2/angular2');
 var router_1 = require('angular2/router');
 var RoutineSnapshot = (function () {
-    function RoutineSnapshot(params, routineService, database, router) {
-        this.params = params;
-        this.routineService = routineService;
+    function RoutineSnapshot(database, router) {
         this.database = database;
         this.router = router;
-        var id = params.get('id');
-        if (id != null) {
-            this.routine = routineService.get(parseInt(id, 10));
-        }
     }
     RoutineSnapshot.prototype.startWorkout = function () {
-        var _this = this;
+        var createSets = function (lift) {
+            var sets = [];
+            for (var i = 0; i < lift.setCount; i++) {
+                sets.push({
+                    suggestedReps: lift.suggestedReps,
+                    suggestedWeight: 100,
+                });
+            }
+            return sets;
+        };
         if (this.routine) {
-            this.database.createRoutineEntry(new routine_entry_1.RoutineEntry(this.routine)).then(function (id) {
-                _this.router.navigate(['/RoutineLogger', { id: id }]);
+            var now = Date.now();
+            if (!this.routine.entries) {
+                this.routine.entries = [];
+            }
+            this.routine.entries.push({
+                timestamp: now,
+                lifts: this.routine.lifts.map(function (lift) {
+                    return {
+                        lift: lift,
+                        sets: createSets(lift)
+                    };
+                })
             });
+            this.routine.lastCompletedTime = now;
+            this.database.saveRoutine(this.routine);
+            this.router.navigate(['/RoutineLogger', { id: now }]);
         }
     };
     __decorate([
         angular2_1.Input(), 
-        __metadata('design:type', routine_1.Routine)
+        __metadata('design:type', Object)
     ], RoutineSnapshot.prototype, "routine");
     RoutineSnapshot = __decorate([
         angular2_1.Component({
@@ -50,7 +63,7 @@ var RoutineSnapshot = (function () {
             //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
             styles: ["\n    :host {\n      display: block;\n    }\n    \n    h3 {\n      font-size: 24px;\n      font-weight: 500;\n    }\n    \n    h5 {\n      color: rgba(0, 0, 0, .54);\n      font-style: italic;\n    }\n    "]
         }), 
-        __metadata('design:paramtypes', [router_1.RouteParams, routine_service_1.RoutineService, database_service_1.Database, router_1.Router])
+        __metadata('design:paramtypes', [database_service_1.Database, router_1.Router])
     ], RoutineSnapshot);
     return RoutineSnapshot;
 })();

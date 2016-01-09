@@ -1,12 +1,12 @@
 <div class="card">
-  <div *ng-if="routineEntry">
+  <div *ng-if="routine">
     <form (change)="handleChange()">
-      <div *ng-for="#entry of routineEntry.liftEntries">
+      <div *ng-for="#liftEntry of entry.lifts">
         <div class="card">
           <div class="card-content">
-            <h3 class="card-title">{{entry.lift.name}}</h3>
+            <h3 class="card-title">{{liftEntry.lift.name}}</h3>
             <div class="sets">
-              <div *ng-for="#set of entry.sets; #setNumber = index" class="lift-set">
+              <div *ng-for="#set of liftEntry.sets; #setNumber = index" class="lift-set">
                 <span>Set {{setNumber + 1}}:</span>
                 <input type="number" class="short-input" [attr.placeholder]="set.suggestedReps"
                       [(ng-model)]="set.actualReps">&nbsp;&times;&nbsp;
@@ -19,7 +19,7 @@
       </div>
     </form>
   </div>
-  <div *ng-if="!routineEntry">
+  <div *ng-if="!routine">
     Loading..
   </div>
 </div>

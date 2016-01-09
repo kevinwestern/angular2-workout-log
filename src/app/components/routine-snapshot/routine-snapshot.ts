@@ -1,11 +1,9 @@
 import {Component, NgFor, Input} from 'angular2/angular2';
-import {Routine} from '../../models/routine';
-import {RoutineEntry} from '../../models/routine-entry';
+import {Lift, LiftSet, Routine} from '../../models';
 import {Database} from '../../services/database-service';
-import {RoutineService} from '../../services/routine-service';
 import {MessageOrDate} from '../../pipes/messageordate';
 import {ViewEncapsulation} from 'angular2/angular2';
-import {RouteConfig, ROUTER_DIRECTIVES, RouteParams, Router} from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router';
 
 @Component({
   selector: 'routine-snapshot',
@@ -35,21 +33,39 @@ export class RoutineSnapshot {
   routine: Routine;
   
   constructor(
-    private params: RouteParams,
-    private routineService: RoutineService,
     private database: Database,
     private router: Router) {
-    let id = params.get('id');
-    if (id != null) {
-      this.routine = routineService.get(parseInt(id, 10));
-    }
   }
   
   startWorkout() {
+    const createSets = (lift: Lift): LiftSet[] => {
+      const sets = [];
+      for(let i = 0; i < lift.setCount; i++) {
+        sets.push({
+          suggestedReps: lift.suggestedReps,
+          suggestedWeight: 100,
+        });
+      }
+      return sets;
+    };
+ 
     if (this.routine) {
-      this.database.createRoutineEntry(new RoutineEntry(this.routine)).then((id) => {
-        this.router.navigate(['/RoutineLogger', {id}])
-      })
+      const now = Date.now();
+      if (!this.routine.entries) {
+        this.routine.entries = [];
+      }
+      this.routine.entries.push({
+       timestamp: now,
+       lifts: this.routine.lifts.map(lift => {
+         return {
+           lift: lift,
+           sets: createSets(lift)
+         };
+       })
+      });
+      this.routine.lastCompletedTime = now;
+      this.database.saveRoutine(this.routine)
+      this.router.navigate(['/RoutineLogger', {id: now}])
     }
   }
 }
