@@ -1,5 +1,6 @@
 import {Component, NgFor, Input} from 'angular2/angular2';
-import {Lift, LiftSet, Routine} from '../../models';
+import {Entry, Lift, LiftSet, Routine} from '../../models';
+import entryBuilder from '../../entry-builder';
 import {Database} from '../../services/database-service';
 import {MessageOrDate} from '../../pipes/messageordate';
 import {ViewEncapsulation} from 'angular2/angular2';
@@ -52,17 +53,22 @@ export class RoutineSnapshot {
     if (this.routine) {
       const now = Date.now();
       if (!this.routine.entries) {
-        this.routine.entries = [];
+        this.routine.entries = [{
+          timestamp: now,
+          lifts: this.routine.lifts.map(lift => {
+            return {
+              lift: lift,
+              sets: createSets(lift)
+            };
+          })
+        }];
+      } else {
+        this.routine.entries.push(
+          entryBuilder.createEntryFromPreviousEntry(
+            entryBuilder.getMostRecentEntry(this.routine.entries, Date.now()))
+          );
       }
-      this.routine.entries.push({
-       timestamp: now,
-       lifts: this.routine.lifts.map(lift => {
-         return {
-           lift: lift,
-           sets: createSets(lift)
-         };
-       })
-      });
+      this.routine.entries.push();
       this.routine.lastCompletedTime = now;
       this.database.saveRoutine(this.routine)
       this.router.navigate(['/RoutineLogger', {id: now}])

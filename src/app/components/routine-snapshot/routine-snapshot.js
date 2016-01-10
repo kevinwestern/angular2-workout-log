@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
+var entry_builder_1 = require('../../entry-builder');
 var database_service_1 = require('../../services/database-service');
 var messageordate_1 = require('../../pipes/messageordate');
 var angular2_2 = require('angular2/angular2');
@@ -33,17 +34,20 @@ var RoutineSnapshot = (function () {
         if (this.routine) {
             var now = Date.now();
             if (!this.routine.entries) {
-                this.routine.entries = [];
+                this.routine.entries = [{
+                        timestamp: now,
+                        lifts: this.routine.lifts.map(function (lift) {
+                            return {
+                                lift: lift,
+                                sets: createSets(lift)
+                            };
+                        })
+                    }];
             }
-            this.routine.entries.push({
-                timestamp: now,
-                lifts: this.routine.lifts.map(function (lift) {
-                    return {
-                        lift: lift,
-                        sets: createSets(lift)
-                    };
-                })
-            });
+            else {
+                this.routine.entries.push(entry_builder_1.default.createEntryFromPreviousEntry(entry_builder_1.default.getMostRecentEntry(this.routine.entries, Date.now())));
+            }
+            this.routine.entries.push();
             this.routine.lastCompletedTime = now;
             this.database.saveRoutine(this.routine);
             this.router.navigate(['/RoutineLogger', { id: now }]);

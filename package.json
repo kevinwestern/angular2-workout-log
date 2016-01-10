@@ -15,11 +15,13 @@
     "systemjs": "0.19.2"
   },
   "devDependencies": {
+    "jasmine-core": "2.4.1",
     "live-server": "^0.8.2",
     "typescript": "^1.6.2"
   },
   "scripts": {
     "tsc": "tsc -p src -w",
-    "start": "live-server --open=src --entry-file=src/index.html"
+    "start": "live-server --open=src --entry-file=src/index.html",
+    "test": "live-server --open=src/unit-tests.html"
   }
 }
