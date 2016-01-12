@@ -1,4 +1,6 @@
-import {Component, bootstrap, NgFor, FORM_DIRECTIVES, Input, bind} from 'angular2/angular2';
+import {Component, bind} from 'angular2/core';
+import {NgFor, FORM_DIRECTIVES} from 'angular2/common';
+import {bootstrap} from 'angular2/platform/browser'
 import {Routine} from './models';
 import {MessageOrDate} from './pipes/messageordate';
 import {AppLocalStorage} from './services/database-service';
@@ -13,7 +15,7 @@ import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDI
   selector: 'routine-list',
   template: `
       <div class="app-content">
-          <routine-snapshot *ng-for="#routine of routines" [routine]="routine"></routine-snapshot>
+          <routine-snapshot *ngFor="#routine of routines" [routine]="routine"></routine-snapshot>
       </div>
   `,
   directives: [RoutineSnapshot, NgFor, ROUTER_DIRECTIVES],
@@ -33,10 +35,10 @@ class RoutineList {
   directives: [ROUTER_DIRECTIVES],
 })
 @RouteConfig([
-  { path: '/', component: RoutineList },
-  { path: '/routines', component: RoutineList },
-  { path: '/routine/:id', component: RoutineHistory, as: 'RoutineHistory' },
-  { path: '/routine/:id/edit', component: RoutineLogger, as: 'RoutineLogger'},
+  { path: '/', name: 'RoutineList', component: RoutineList },
+  { path: '/routines', name: 'RoutineList', component: RoutineList },
+  { path: '/routine/:id', name: 'RoutineHistory', component: RoutineHistory  },
+  { path: '/routine/:id/edit', name: 'RoutineLogger', component: RoutineLogger },
 ])
 class AppComponent {
   

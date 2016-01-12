@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/angular2';
+import {Injectable} from 'angular2/core';
 import {Entry, Routine} from '../models';
 import _SEED_DATA_ROUTINES from '../seed-data';
 

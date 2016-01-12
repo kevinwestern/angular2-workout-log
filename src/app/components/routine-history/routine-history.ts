@@ -1,7 +1,7 @@
-import {Component, NgFor, NgIf, Input, Output, Directive, FORM_DIRECTIVES} from 'angular2/angular2';
+import {Component, Input, Output, Directive, ViewEncapsulation} from 'angular2/core';
+import {NgFor, NgIf, FORM_DIRECTIVES} from 'angular2/common';
 import {Entry, Routine} from '../../models';
 import {Database} from '../../services/database-service';
-import {ViewEncapsulation} from 'angular2/angular2';
 import {RouteConfig, ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
 
 

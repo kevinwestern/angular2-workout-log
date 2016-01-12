@@ -1,9 +1,9 @@
-import {Component, NgFor, Input} from 'angular2/angular2';
+import {Component, Input, ViewEncapsulation} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 import {Entry, Lift, LiftSet, Routine} from '../../models';
 import entryBuilder from '../../entry-builder';
 import {Database} from '../../services/database-service';
 import {MessageOrDate} from '../../pipes/messageordate';
-import {ViewEncapsulation} from 'angular2/angular2';
 import {RouteConfig, ROUTER_DIRECTIVES, Router, RouterLink} from 'angular2/router';
 
 @Component({
