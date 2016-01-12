@@ -13,8 +13,9 @@ var angular2_1 = require('angular2/angular2');
 var messageordate_1 = require('./pipes/messageordate');
 var database_service_1 = require('./services/database-service');
 var database_service_2 = require('./services/database-service');
-var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
+var routine_history_1 = require('./components/routine-history/routine-history');
 var routine_logger_1 = require('./components/routine-logger/routine-logger');
+var routine_snapshot_1 = require('./components/routine-snapshot/routine-snapshot');
 var router_1 = require('angular2/router');
 var RoutineList = (function () {
     function RoutineList(database) {
@@ -43,8 +44,8 @@ var AppComponent = (function () {
         router_1.RouteConfig([
             { path: '/', component: RoutineList },
             { path: '/routines', component: RoutineList },
+            { path: '/routine/:id', component: routine_history_1.RoutineHistory, as: 'RoutineHistory' },
             { path: '/routine/:id/edit', component: routine_logger_1.RoutineLogger, as: 'RoutineLogger' },
-            { path: '/routine/:id', component: routine_snapshot_1.RoutineSnapshot, as: 'WorkoutRoutine' }
         ]), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
@@ -55,6 +56,7 @@ angular2_1.bootstrap(AppComponent, [
     database_service_2.Database,
     messageordate_1.MessageOrDate,
     router_1.ROUTER_BINDINGS,
+    router_1.ROUTER_PROVIDERS,
     angular2_1.bind(router_1.APP_BASE_HREF).toValue('/src')
 ]);
 //# sourceMappingURL=app.js.map

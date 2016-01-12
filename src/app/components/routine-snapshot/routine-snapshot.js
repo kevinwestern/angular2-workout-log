@@ -61,7 +61,7 @@ var RoutineSnapshot = (function () {
         angular2_1.Component({
             selector: 'routine-snapshot',
             templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
-            directives: [angular2_1.NgFor, router_1.ROUTER_DIRECTIVES],
+            directives: [angular2_1.NgFor, router_1.ROUTER_DIRECTIVES, router_1.RouterLink],
             encapsulation: angular2_2.ViewEncapsulation.Emulated,
             pipes: [messageordate_1.MessageOrDate],
             //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],

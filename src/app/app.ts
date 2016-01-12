@@ -3,9 +3,10 @@ import {Routine} from './models';
 import {MessageOrDate} from './pipes/messageordate';
 import {AppLocalStorage} from './services/database-service';
 import {Database} from './services/database-service';
-import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
+import {RoutineHistory} from './components/routine-history/routine-history';
 import {RoutineLogger} from './components/routine-logger/routine-logger';
-import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDINGS} from 'angular2/router'
+import {RoutineSnapshot} from './components/routine-snapshot/routine-snapshot';
+import {RouteConfig, RouteParams, ROUTER_DIRECTIVES, APP_BASE_HREF, ROUTER_BINDINGS, ROUTER_PROVIDERS} from 'angular2/router'
 
 
 @Component({
@@ -34,8 +35,8 @@ class RoutineList {
 @RouteConfig([
   { path: '/', component: RoutineList },
   { path: '/routines', component: RoutineList },
+  { path: '/routine/:id', component: RoutineHistory, as: 'RoutineHistory' },
   { path: '/routine/:id/edit', component: RoutineLogger, as: 'RoutineLogger'},
-  { path: '/routine/:id', component: RoutineSnapshot, as: 'WorkoutRoutine' }
 ])
 class AppComponent {
   
@@ -45,5 +46,6 @@ bootstrap(AppComponent, [
   Database,
   MessageOrDate,
   ROUTER_BINDINGS,
+  ROUTER_PROVIDERS,
   bind(APP_BASE_HREF).toValue('/src')
  ]);

@@ -4,12 +4,12 @@ import entryBuilder from '../../entry-builder';
 import {Database} from '../../services/database-service';
 import {MessageOrDate} from '../../pipes/messageordate';
 import {ViewEncapsulation} from 'angular2/angular2';
-import {RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, Router, RouterLink} from 'angular2/router';
 
 @Component({
   selector: 'routine-snapshot',
   templateUrl: '/src/app/components/routine-snapshot/routine-snapshot.html',
-  directives: [NgFor, ROUTER_DIRECTIVES],
+  directives: [NgFor, ROUTER_DIRECTIVES, RouterLink],
   encapsulation: ViewEncapsulation.Emulated,
   pipes: [MessageOrDate],
   //styleUrls: ['app/components/routine-snapshot/routine-snapshot.css'],
