@@ -21,8 +21,21 @@ System.register(['angular2/core'], function(exports_1) {
                 }
                 MessageOrDate.prototype.transform = function (value, args) {
                     if (value) {
-                        var diff = moment().diff(value, 'days');
-                        return diff ? diff + " days ago" : 'Recorded today.';
+                        var now = moment();
+                        var diff = now.diff(value, 'days');
+                        if (diff) {
+                            return diff + " days ago";
+                        }
+                        var minutes = now.diff(value, 'minutes');
+                        if (minutes > 60) {
+                            return now.diff(value, 'hours') + ' hours ago';
+                        }
+                        else if (minutes) {
+                            return minutes + " minutes ago";
+                        }
+                        else {
+                            return now.diff(value, 'seconds') + ' seconds ago';
+                        }
                     }
                     return args[0];
                 };
