@@ -28,10 +28,8 @@ System.register(['angular2/core', 'angular2/common', '../../services/database-se
             RoutineHistory = (function () {
                 function RoutineHistory(params, database) {
                     this.database = database;
+                    this.routine = this.database.getRoutineByName(params.get('id'));
                 }
-                RoutineHistory.prototype.handleChange = function (e) {
-                    this.database.saveRoutine(this.routine);
-                };
                 RoutineHistory = __decorate([
                     core_1.Component({
                         selector: 'routine-history',

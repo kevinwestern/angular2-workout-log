@@ -23,10 +23,6 @@ export class RoutineHistory {
   
   constructor(params: RouteParams, database: Database) {
     this.database = database;
-    
-  }
-  
-  handleChange(e) {
-    this.database.saveRoutine(this.routine);
+    this.routine = this.database.getRoutineByName(params.get('id'));
   }
 }

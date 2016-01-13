@@ -43,5 +43,9 @@ export class Database {
     return this.db.getRoutines()
       .find(routine => routine.entries && !!routine.entries.find(entry => entry.timestamp == id));
   }
+  
+  getRoutineByName(name: string): Routine {
+    return this.db.getRoutines().find(r => r.name == name);
+  }
 }
 

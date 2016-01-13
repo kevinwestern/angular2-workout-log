@@ -59,6 +59,9 @@ System.register(['angular2/core', '../seed-data'], function(exports_1) {
                     return this.db.getRoutines()
                         .find(function (routine) { return routine.entries && !!routine.entries.find(function (entry) { return entry.timestamp == id; }); });
                 };
+                Database.prototype.getRoutineByName = function (name) {
+                    return this.db.getRoutines().find(function (r) { return r.name == name; });
+                };
                 Database = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [AppLocalStorage])
